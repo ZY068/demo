@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
+import router from '../router'
 
 const api = axios.create({
   baseURL: 'http://localhost:8080/api',
@@ -12,25 +13,24 @@ api.interceptors.request.use(config => {
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
   }
-
-  // 临时方案：从 localStorage 获取用户ID，添加到请求头
-  // TODO: 后续改为从 JWT 解析
-  const userStr = localStorage.getItem('user')
-  if (userStr) {
-    try {
-      const user = JSON.parse(userStr)
-      if (user.id) {
-        config.headers['X-User-Id'] = user.id
-      }
-    } catch {}
-  }
-
   return config
 })
 
 api.interceptors.response.use(
   response => response.data,
   error => {
+    // 401 Unauthorized：Token无效或已过期（被踢出）
+    if (error.response?.status === 401) {
+      const message = error.response?.data?.msg || '您的账号已在其他设备登录'
+      ElMessage.error(message)
+
+      // 清除本地登录状态，跳转登录页
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
+      router.push('/login')
+      return Promise.reject(error)
+    }
+
     const message = error.response?.data?.msg || error.message || '请求失败'
     ElMessage.error(message)
     return Promise.reject(error)

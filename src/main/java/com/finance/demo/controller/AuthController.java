@@ -4,13 +4,18 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.finance.demo.common.Result;
 import com.finance.demo.entity.SysUser;
 import com.finance.demo.mapper.SysUserMapper;
+import com.finance.demo.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 认证控制器
- * 安全登录：使用 BCrypt 密码验证
+ * 安全登录：使用 BCrypt 密码验证 + JWT Token 单点登录
  */
 @RestController
 @RequestMapping("/api/auth")
@@ -24,10 +29,10 @@ public class AuthController {
 
     /**
      * 用户登录
-     * 使用 BCrypt 验证密码
+     * 使用 BCrypt 验证密码，生成 JWT Token 实现单点登录
      */
     @PostMapping("/login")
-    public Result<SysUser> login(@RequestBody SysUser loginRequest) {
+    public Result<Map<String, Object>> login(@RequestBody SysUser loginRequest) {
         // 1. 根据用户名查询用户
         SysUser user = userMapper.selectOne(new QueryWrapper<SysUser>()
                 .eq("username", loginRequest.getUsername()));
@@ -46,10 +51,43 @@ public class AuthController {
             return Result.error("用户名或密码错误");
         }
 
-        // 4. 清除密码，不返回给前端（安全原则）
-        user.setPassword(null);
+        // 4. 生成 JWT Token（单点登录：新登录会覆盖旧Token）
+        String token = JwtUtil.generateToken(user.getId(), user.getUsername());
 
-        return Result.success(user);
+        // 5. 更新用户的Token和最后登录时间
+        user.setToken(token);
+        user.setLastLoginAt(LocalDateTime.now());
+        userMapper.updateById(user);
+
+        // 6. 构建返回结果
+        Map<String, Object> result = new HashMap<>();
+        result.put("token", token);
+
+        // 清除密码后返回用户信息
+        user.setPassword(null);
+        user.setToken(null); // 用户的token不返回给前端
+        result.put("user", user);
+
+        return Result.success(result);
+    }
+
+    /**
+     * 用户登出（使当前Token失效）
+     */
+    @PostMapping("/logout")
+    public Result<Void> logout(@RequestHeader("Authorization") String authHeader) {
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            Integer userId = JwtUtil.getUserId(token);
+            if (userId != null) {
+                SysUser user = userMapper.selectById(userId);
+                if (user != null) {
+                    user.setToken(null);
+                    userMapper.updateById(user);
+                }
+            }
+        }
+        return Result.success(null);
     }
 
     /**

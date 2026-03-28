@@ -64,7 +64,7 @@ const handleLogin = async () => {
     const res = await api.login(form)
     if (res.code === 200) {
       localStorage.setItem('token', res.data?.token || 'demo-token')
-      localStorage.setItem('user', JSON.stringify(res.data || { username: form.username }))
+      localStorage.setItem('user', JSON.stringify(res.data?.user || { username: form.username }))
       ElMessage.success('登录成功')
       router.push('/dashboard')
     } else {

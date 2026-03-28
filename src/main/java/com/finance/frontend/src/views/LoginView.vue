@@ -80,11 +80,19 @@ const handleLogin = async () => {
   try {
     const res = await axios.post('http://localhost:8080/api/auth/login', loginForm.value)
     if (res.data.code === 200) {
-      localStorage.setItem('user', JSON.stringify(res.data.data))
-      const role = res.data.data.role
-      
+      // 保存 Token 和用户信息
+      const token = res.data.data?.token
+      const user = res.data.data?.user
+      if (token) {
+        localStorage.setItem('token', token)
+      }
+      if (user) {
+        localStorage.setItem('user', JSON.stringify(user))
+      }
+      const role = user?.role
+
       ElMessage.success({
-        message: `欢迎回来，${res.data.data.username}`,
+        message: `欢迎回来，${user?.username || loginForm.value.username}`,
         type: 'success'
       })
 
