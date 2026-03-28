@@ -356,20 +356,14 @@ public class ExpenseClaimController {
     }
 
     /**
-     * 从请求头获取当前用户ID
-     * 临时实现：从 X-User-Id 头获取
-     * TODO: 后续改为从 JWT 解析
+     * 从请求属性获取当前用户ID
+     * AuthInterceptor 会把用户ID存入 request.setAttribute("currentUserId", userId)
      */
     private Integer getCurrentUserId(HttpServletRequest request) {
-        String userIdStr = request.getHeader("X-User-Id");
-        if (userIdStr != null && !userIdStr.isEmpty()) {
-            try {
-                return Integer.valueOf(userIdStr);
-            } catch (NumberFormatException e) {
-                return null;
-            }
+        Object userId = request.getAttribute("currentUserId");
+        if (userId != null) {
+            return (Integer) userId;
         }
-        // 临时：如果没有传，默认返回用户ID 1（用于测试）
-        return 1;
+        return null;
     }
 }

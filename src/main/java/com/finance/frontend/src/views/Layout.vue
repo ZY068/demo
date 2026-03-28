@@ -9,8 +9,8 @@
       <!-- 动态菜单：按角色显示不同菜单 -->
       <el-menu :default-active="activeMenu" router class="side-menu" background-color="#1a1a2e" text-color="#a0a0a0" active-text-color="#fff">
 
-        <!-- 工作台：仅经理、财务、管理员可见 -->
-        <el-menu-item v-if="userRole !== 0" index="/dashboard">
+        <!-- 工作台：仅经理、财务可见 -->
+        <el-menu-item v-if="userRole === 1 || userRole === 2" index="/dashboard">
           <el-icon><DataAnalysis /></el-icon>
           <span>工作台</span>
         </el-menu-item>
