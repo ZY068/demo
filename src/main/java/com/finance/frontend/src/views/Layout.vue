@@ -7,10 +7,10 @@
       </div>
 
       <!-- 动态菜单：按角色显示不同菜单 -->
-      <el-menu :default-active="activeMenu" router class="side-menu" background-color="#1a1a2e" text-color="#a0a0a0" active-text-color="#fff">
+      <el-menu :default-active="activeMenu" router class="side-menu">
 
-        <!-- 工作台：仅经理、财务可见 -->
-        <el-menu-item v-if="userRole === 1 || userRole === 2" index="/dashboard">
+        <!-- 工作台：仅经理、财务、管理员可见 -->
+        <el-menu-item v-if="userRole !== 0" index="/dashboard">
           <el-icon><DataAnalysis /></el-icon>
           <span>工作台</span>
         </el-menu-item>
@@ -213,7 +213,10 @@ const handleCommand = (command) => {
 <style scoped>
 .layout-container { height: 100vh; }
 .aside {
-  background: #1a1a2e;
+  background: rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
   overflow-x: hidden;
 }
 .logo {
@@ -224,27 +227,41 @@ const handleCommand = (command) => {
   color: white;
   font-size: 18px;
   font-weight: bold;
-  border-bottom: 1px solid #2a2a4e;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
-.logo .el-icon { margin-right: 8px; color: #409eff; }
-.side-menu { border-right: none; }
-.side-menu .el-menu-item { height: 50px; line-height: 50px; }
-.side-menu .el-menu-item:hover { background: #2a2a4e !important; }
-.side-menu .el-menu-item.is-active { background: #409eff !important; }
+.logo .el-icon { margin-right: 8px; color: #60a5fa; }
+.side-menu { border-right: none !important; background: transparent !important; }
+.side-menu .el-menu-item {
+  height: 50px;
+  line-height: 50px;
+  color: rgba(255, 255, 255, 0.75) !important;
+  background: transparent !important;
+}
+.side-menu .el-menu-item:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #fff !important;
+}
+.side-menu .el-menu-item.is-active {
+  background: rgba(64, 158, 255, 0.3) !important;
+  color: #fff !important;
+  border-right: 2px solid #60a5fa;
+}
 .menu-badge { margin-left: 8px; }
 .header {
-  background: white;
+  background: rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 24px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
 }
 .header-left { display: flex; align-items: center; }
 .header-right { display: flex; align-items: center; }
 .user-info { display: flex; align-items: center; gap: 8px; cursor: pointer; }
-.username { font-size: 14px; color: #333; }
-.main { background: #f5f7fa; padding: 20px; }
+.username { font-size: 14px; color: #fff; }
+.main { background: transparent; padding: 20px; }
 .fade-enter-active, .fade-leave-active { transition: opacity 0.2s; }
 .fade-enter-from, .fade-leave-to { opacity: 0; }
 </style>

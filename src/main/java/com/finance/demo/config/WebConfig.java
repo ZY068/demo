@@ -14,23 +14,18 @@ public class WebConfig implements WebMvcConfigurer {
     private AuthInterceptor authInterceptor;
 
     @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOriginPatterns("*")
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
-                .allowCredentials(true);
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(authInterceptor)
+                .addPathPatterns("/api/**")
+                .excludePathPatterns("/api/auth/login");
     }
 
     @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        // API 请求需要验证 Token
-        registry.addInterceptor(authInterceptor)
-                .addPathPatterns("/api/**")
-                // 放行登录接口
-                .excludePathPatterns(
-                        "/api/auth/login",
-                        "/api/auth/logout"
-                );
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOriginPatterns("http://localhost:*")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true);
     }
 }

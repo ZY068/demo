@@ -5,17 +5,17 @@ import com.finance.demo.common.Result;
 import com.finance.demo.entity.SysUser;
 import com.finance.demo.mapper.SysUserMapper;
 import com.finance.demo.util.JwtUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * 认证控制器
- * 安全登录：使用 BCrypt 密码验证 + JWT Token 单点登录
+ * 安全登录：使用 BCrypt 密码验证
  */
 @RestController
 @RequestMapping("/api/auth")
@@ -29,7 +29,7 @@ public class AuthController {
 
     /**
      * 用户登录
-     * 使用 BCrypt 验证密码，生成 JWT Token 实现单点登录
+     * 使用 BCrypt 验证密码
      */
     @PostMapping("/login")
     public Result<Map<String, Object>> login(@RequestBody SysUser loginRequest) {
@@ -51,51 +51,33 @@ public class AuthController {
             return Result.error("用户名或密码错误");
         }
 
-        // 4. 生成 JWT Token（单点登录：新登录会覆盖旧Token）
+        // 4. 生成 JWT Token
         String token = JwtUtil.generateToken(user.getId(), user.getUsername());
 
-        // 5. 更新用户的Token和最后登录时间
-        user.setToken(token);
-        user.setLastLoginAt(LocalDateTime.now());
-        userMapper.updateById(user);
-
-        // 6. 构建返回结果
-        Map<String, Object> result = new HashMap<>();
-        result.put("token", token);
-
-        // 清除密码后返回用户信息
+        // 5. 构建返回数据（不包含密码）
         user.setPassword(null);
-        user.setToken(null); // 用户的token不返回给前端
-        result.put("user", user);
+        Map<String, Object> data = new HashMap<>();
+        data.put("token", token);
+        data.put("id", user.getId());
+        data.put("username", user.getUsername());
+        data.put("realName", user.getRealName());
+        data.put("role", user.getRole());
+        data.put("deptId", user.getDeptId());
 
-        return Result.success(result);
-    }
-
-    /**
-     * 用户登出（使当前Token失效）
-     */
-    @PostMapping("/logout")
-    public Result<Void> logout(@RequestHeader("Authorization") String authHeader) {
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String token = authHeader.substring(7);
-            Integer userId = JwtUtil.getUserId(token);
-            if (userId != null) {
-                SysUser user = userMapper.selectById(userId);
-                if (user != null) {
-                    user.setToken(null);
-                    userMapper.updateById(user);
-                }
-            }
-        }
-        return Result.success(null);
+        return Result.success(data);
     }
 
     /**
      * 修改密码（可选功能）
      */
     @PostMapping("/change-password")
-    public Result changePassword(@RequestBody ChangePasswordRequest request) {
-        SysUser user = userMapper.selectById(request.getUserId());
+    public Result<?> changePassword(@RequestBody ChangePasswordRequest request, HttpServletRequest httpRequest) {
+        Integer currentUserId = (Integer) httpRequest.getAttribute("currentUserId");
+        if (currentUserId == null) {
+            return Result.error("请先登录");
+        }
+
+        SysUser user = userMapper.selectById(currentUserId);
         if (user == null) {
             return Result.error("用户不存在");
         }

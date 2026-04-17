@@ -12,7 +12,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -26,9 +28,9 @@ import java.util.Map;
  * - 财务内审：可以查看所有报销单，进行最终审计
  * - IT管理员：可以查看所有报销单，但不能审批
  */
+@Slf4j
 @RestController
 @RequestMapping("/api/claims")
-@CrossOrigin
 public class ExpenseClaimController {
 
     @Autowired
@@ -172,8 +174,8 @@ public class ExpenseClaimController {
         } catch (RuntimeException e) {
             return Result.error(e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
-            return Result.error("接口异常: " + e.getMessage());
+            log.error("审批接口异常", e);
+            return Result.error("系统异常，请稍后重试");
         }
     }
 
@@ -201,13 +203,13 @@ public class ExpenseClaimController {
         } catch (RuntimeException e) {
             return Result.error(e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
-            return Result.error("接口异常: " + e.getMessage());
+            log.error("审批接口异常", e);
+            return Result.error("系统异常，请稍后重试");
         }
     }
 
     /**
-     * 获取单个报销单详情
+     * 获取单个报销单详情（带权限校验）
      */
     @GetMapping("/{id}")
     public Result<ExpenseClaim> getById(@PathVariable Integer id, HttpServletRequest request) {
@@ -220,17 +222,44 @@ public class ExpenseClaimController {
         if (claim == null) {
             return Result.error("报销单不存在");
         }
+
+        SysUser currentUser = userMapper.selectById(currentUserId);
+        if (currentUser == null) {
+            return Result.error("用户不存在");
+        }
+
+        // 权限校验：员工只能查看自己的，经理只能查看本部门的
+        if (currentUser.getRole().equals(UserRole.EMPLOYEE.getCode())) {
+            if (!claim.getUserId().equals(currentUserId)) {
+                return Result.error("无权限查看该报销单");
+            }
+        } else if (currentUser.getRole().equals(UserRole.MANAGER.getCode())) {
+            if (!claim.getDeptId().equals(currentUser.getDeptId())) {
+                return Result.error("无权限查看该报销单");
+            }
+        }
+        // 财务和管理员可查看所有
+
         return Result.success(claim);
     }
 
     /**
-     * 获取高风险报销单（财务使用）
+     * 获取高风险报销单（仅财务可访问）
      */
     @GetMapping("/high-risk")
     public Result<List<ExpenseClaim>> getHighRisk(HttpServletRequest request) {
         Integer currentUserId = getCurrentUserId(request);
         if (currentUserId == null) {
             return Result.error("请先登录");
+        }
+
+        SysUser currentUser = userMapper.selectById(currentUserId);
+        if (currentUser == null) {
+            return Result.error("用户不存在");
+        }
+
+        if (!currentUser.getRole().equals(UserRole.FINANCE.getCode())) {
+            return Result.error("无权限，仅财务可查看高风险报销单");
         }
 
         List<ExpenseClaim> list = expenseClaimService.getHighRiskClaims();
@@ -240,113 +269,83 @@ public class ExpenseClaimController {
     /**
      * 删除报销单（仅财务可操作，会留下审计痕迹）
      */
+    @Transactional(rollbackFor = Exception.class)
     @DeleteMapping("/{id}")
     public Result<Void> deleteClaim(@PathVariable Integer id, HttpServletRequest request) {
-        System.out.println("========== 删除报销单开始 ==========");
-        System.out.println("[删除报销单] 接收到的ID: " + id);
+        log.info("删除报销单开始, id={}", id);
 
         Integer currentUserId = getCurrentUserId(request);
-        System.out.println("[删除报销单] 当前用户ID: " + currentUserId);
-
         if (currentUserId == null) {
-            System.out.println("[删除报销单] 用户未登录");
             return Result.error("请先登录");
         }
 
         SysUser currentUser = userMapper.selectById(currentUserId);
         if (currentUser == null) {
-            System.out.println("[删除报销单] 用户不存在");
             return Result.error("用户不存在");
         }
 
-        System.out.println("[删除报销单] 用户角色: " + currentUser.getRole());
+        log.info("删除报销单, 操作人={}, 角色={}", currentUserId, currentUser.getRole());
 
         // 只有财务可以删除
         if (!currentUser.getRole().equals(UserRole.FINANCE.getCode())) {
-            System.out.println("[删除报销单] 无权限");
             return Result.error("无权限，仅财务可删除报销单");
         }
 
         // 获取报销单信息用于记录日志
         ExpenseClaim claim = expenseClaimService.getById(id);
         if (claim == null) {
-            System.out.println("[删除报销单] 报销单不存在");
             return Result.error("报销单不存在");
         }
 
-        System.out.println("[删除报销单] 报销单信息: " + claim.getClaimNo() + ", 金额: " + claim.getAmount() + ", 状态: " + claim.getStatus());
+        log.info("删除报销单, claimNo={}, amount={}, status={}", claim.getClaimNo(), claim.getAmount(), claim.getStatus());
 
-        // 【修改】根据报销单状态处理预算回滚
-        try {
-            java.math.BigDecimal amount = new java.math.BigDecimal(claim.getAmount()).divide(new java.math.BigDecimal(100));
-            Integer year = java.time.LocalDate.now().getYear();
-            Integer status = claim.getStatus();
+        // 根据报销单状态处理预算回滚
+        java.math.BigDecimal amount = new java.math.BigDecimal(claim.getAmount()).divide(new java.math.BigDecimal(100));
+        Integer year = java.time.LocalDate.now().getYear();
+        Integer status = claim.getStatus();
 
-            // PENDING_MANAGER：冻结状态，释放冻结
-            if (status == ClaimStatus.PENDING_MANAGER.getCode()) {
-                System.out.println("[删除报销单] 状态=PENDING_MANAGER，释放冻结预算");
-                departmentBudgetService.releaseFrozen(claim.getDeptId(), amount, year);
-            }
-            // PENDING_FINANCE：经理已审批通过，冻结=0，used已增加，回滚used
-            else if (status == ClaimStatus.PENDING_FINANCE.getCode()) {
-                System.out.println("[删除报销单] 状态=PENDING_FINANCE，回滚已使用预算");
-                departmentBudgetService.rollbackUsed(claim.getDeptId(), amount, year);
-            }
-            // FINANCE_APPROVED：财务已审批，used已增加，回滚used
-            else if (status == ClaimStatus.FINANCE_APPROVED.getCode()) {
-                System.out.println("[删除报销单] 状态=FINANCE_APPROVED，回滚已使用预算");
-                departmentBudgetService.rollbackUsed(claim.getDeptId(), amount, year);
-            } else {
-                System.out.println("[删除报销单] 其他状态，无需处理预算");
-            }
-        } catch (Exception e) {
-            System.err.println("[删除报销单] 预算处理失败: " + e.getMessage());
+        if (status == ClaimStatus.PENDING_MANAGER.getCode()) {
+            log.info("状态=PENDING_MANAGER，释放冻结预算");
+            departmentBudgetService.releaseFrozen(claim.getDeptId(), amount, year);
+        } else if (status == ClaimStatus.PENDING_FINANCE.getCode()) {
+            log.info("状态=PENDING_FINANCE，回滚已使用预算");
+            departmentBudgetService.rollbackUsed(claim.getDeptId(), amount, year);
+        } else if (status == ClaimStatus.FINANCE_APPROVED.getCode()) {
+            log.info("状态=FINANCE_APPROVED，回滚已使用预算");
+            departmentBudgetService.rollbackUsed(claim.getDeptId(), amount, year);
         }
 
-        // 先记录审计日志（在任何删除操作之前，确保日志一定会保存）
-        AuditLog log = new AuditLog();
+        // 记录审计日志
+        AuditLog auditLog = new AuditLog();
+        auditLog.setClaimId(id);
+        auditLog.setOperatorId(currentUserId);
+        auditLog.setActionType("DELETE");
+        auditLog.setAction(String.format("【财务删除】报销单 %s，金额=%.2f元，事由=%s",
+                claim.getClaimNo(),
+                claim.getAmount() / 100.0,
+                claim.getTitle()));
         try {
-            log.setClaimId(id);
-            log.setOperatorId(currentUserId);
-            log.setActionType("DELETE");
-            log.setAction(String.format("【财务删除】报销单 %s，金额=%.2f元，事由=%s",
-                    claim.getClaimNo(),
-                    claim.getAmount() / 100.0,
-                    claim.getTitle()));
-            log.setBeforeValue(objectMapper.writeValueAsString(claim));
-            log.setAfterValue(null);
-            System.out.println("[删除报销单] 准备插入审计日志...");
-            int insertResult = auditLogMapper.insert(log);
-            System.out.println("[删除报销单] 审计日志插入结果: " + insertResult + ", 日志ID: " + log.getId());
+            auditLog.setBeforeValue(objectMapper.writeValueAsString(claim));
         } catch (Exception e) {
-            System.err.println("[删除报销单] 记录审计日志失败: " + e.getMessage());
-            e.printStackTrace();
+            log.warn("序列化报销单失败", e);
+            auditLog.setBeforeValue("{}");
         }
+        auditLog.setAfterValue(null);
+        auditLogMapper.insert(auditLog);
 
         // 删除关联的审批记录（外键约束）
-        try {
-            LambdaQueryWrapper<ApprovalRecord> approvalWrapper = new LambdaQueryWrapper<>();
-            approvalWrapper.eq(ApprovalRecord::getClaimId, id);
-            int approvalCount = approvalRecordMapper.delete(approvalWrapper);
-            System.out.println("[删除报销单] 删除审批记录: " + approvalCount + "条");
-        } catch (Exception e) {
-            System.err.println("[删除报销单] 删除审批记录失败: " + e.getMessage());
-        }
+        LambdaQueryWrapper<ApprovalRecord> approvalWrapper = new LambdaQueryWrapper<>();
+        approvalWrapper.eq(ApprovalRecord::getClaimId, id);
+        approvalRecordMapper.delete(approvalWrapper);
 
         // 删除关联的风险预警记录（外键约束）
-        try {
-            LambdaQueryWrapper<RiskAlert> alertWrapper = new LambdaQueryWrapper<>();
-            alertWrapper.eq(RiskAlert::getClaimId, id);
-            int alertCount = riskAlertMapper.delete(alertWrapper);
-            System.out.println("[删除报销单] 删除预警记录: " + alertCount + "条");
-        } catch (Exception e) {
-            System.err.println("[删除报销单] 删除预警记录失败: " + e.getMessage());
-        }
+        LambdaQueryWrapper<RiskAlert> alertWrapper = new LambdaQueryWrapper<>();
+        alertWrapper.eq(RiskAlert::getClaimId, id);
+        riskAlertMapper.delete(alertWrapper);
 
         // 执行删除
         boolean success = expenseClaimService.removeById(id);
-        System.out.println("[删除报销单] 删除报销单结果: " + success);
-        System.out.println("========== 删除报销单结束 ==========");
+        log.info("删除报销单结束, id={}, success={}", id, success);
 
         if (success) {
             return Result.success(null);
@@ -356,14 +355,9 @@ public class ExpenseClaimController {
     }
 
     /**
-     * 从请求属性获取当前用户ID
-     * AuthInterceptor 会把用户ID存入 request.setAttribute("currentUserId", userId)
+     * 从拦截器设置的 request attribute 获取当前用户ID
      */
     private Integer getCurrentUserId(HttpServletRequest request) {
-        Object userId = request.getAttribute("currentUserId");
-        if (userId != null) {
-            return (Integer) userId;
-        }
-        return null;
+        return (Integer) request.getAttribute("currentUserId");
     }
 }

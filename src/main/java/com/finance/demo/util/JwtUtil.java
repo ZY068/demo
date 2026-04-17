@@ -11,12 +11,19 @@ import java.util.Map;
 
 public class JwtUtil {
 
-    // JWT 密钥（生产环境应从配置文件读取）
-    private static final String SECRET = "SmartReimbursementSystemSecretKey2024VeryLongAndSecure";
+    // JWT 密钥从环境变量读取，默认值仅用于开发环境
+    private static final String SECRET = System.getenv("JWT_SECRET");
     // Token 过期时间（24小时）
     private static final long EXPIRATION = 24 * 60 * 60 * 1000L;
 
-    private static final SecretKey KEY = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
+    private static SecretKey getKey() {
+        String secret = SECRET;
+        if (secret == null || secret.isEmpty()) {
+            // 开发环境默认值，生产环境必须配置环境变量
+            secret = "SmartReimbursementSystemSecretKey2024VeryLongAndSecureDevOnly";
+        }
+        return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+    }
 
     /**
      * 生成 JWT Token
@@ -31,7 +38,7 @@ public class JwtUtil {
                 .subject(username)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION))
-                .signWith(KEY)
+                .signWith(getKey())
                 .compact();
     }
 
@@ -41,7 +48,7 @@ public class JwtUtil {
     public static Claims parseToken(String token) {
         try {
             return Jwts.parser()
-                    .verifyWith(KEY)
+                    .verifyWith(getKey())
                     .build()
                     .parseSignedClaims(token)
                     .getPayload();

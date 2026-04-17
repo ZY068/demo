@@ -39,31 +39,19 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         String token = authHeader.substring(7);
 
-        // 验证Token
+        // 验证并解析Token（parseToken 内部已校验签名和过期时间）
         Claims claims = JwtUtil.parseToken(token);
         if (claims == null) {
-            sendUnauthorized(response, "Token无效");
+            sendUnauthorized(response, "Token无效或已过期");
             return false;
         }
 
-        // 检查Token是否过期
-        if (!JwtUtil.validateToken(token)) {
-            sendUnauthorized(response, "Token已过期");
-            return false;
-        }
-
-        // 检查Token是否与数据库中存储的一致（单点登录：被踢出则不一致）
+        // 查询用户是否存在
         Integer userId = claims.get("userId", Integer.class);
         SysUser user = sysUserMapper.selectById(userId);
 
         if (user == null) {
             sendUnauthorized(response, "用户不存在");
-            return false;
-        }
-
-        // Token不一致说明被新登录踢掉了
-        if (!token.equals(user.getToken())) {
-            sendUnauthorized(response, "您的账号已在其他设备登录");
             return false;
         }
 

@@ -64,11 +64,6 @@ public class SysUser {
      */
     private String lastLoginIp;
 
-    /**
-     * 登录Token（单点登录用，新登录会覆盖旧Token）
-     */
-    private String token;
-
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdAt;
 

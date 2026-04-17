@@ -1,9 +1,8 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
-import router from '../router'
 
 const api = axios.create({
-  baseURL: 'http://118.31.247.232/api',
+  baseURL: 'http://localhost:8080/api',
   timeout: 30000,
   headers: { 'Content-Type': 'application/json' }
 })
@@ -13,24 +12,13 @@ api.interceptors.request.use(config => {
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
   }
+
   return config
 })
 
 api.interceptors.response.use(
   response => response.data,
   error => {
-    // 401 Unauthorized：Token无效或已过期（被踢出）
-    if (error.response?.status === 401) {
-      const message = error.response?.data?.msg || '您的账号已在其他设备登录'
-      ElMessage.error(message)
-
-      // 清除本地登录状态，跳转登录页
-      localStorage.removeItem('token')
-      localStorage.removeItem('user')
-      router.push('/login')
-      return Promise.reject(error)
-    }
-
     const message = error.response?.data?.msg || error.message || '请求失败'
     ElMessage.error(message)
     return Promise.reject(error)

@@ -1,76 +1,101 @@
 <template>
   <div class="risk-page">
-    <el-row :gutter="20">
-      <el-col :span="6">
-        <el-card class="stat-card danger">
-          <div class="stat-value">{{ stats.severe }}</div>
-          <div class="stat-label">严重风险</div>
-        </el-card>
-      </el-col>
-      <el-col :span="6">
-        <el-card class="stat-card warning">
-          <div class="stat-value">{{ stats.high }}</div>
-          <div class="stat-label">高风险</div>
-        </el-card>
-      </el-col>
-      <el-col :span="6">
-        <el-card class="stat-card info">
-          <div class="stat-value">{{ stats.medium }}</div>
-          <div class="stat-label">中风险</div>
-        </el-card>
-      </el-col>
-      <el-col :span="6">
-        <el-card class="stat-card success">
-          <div class="stat-value">{{ stats.low }}</div>
-          <div class="stat-label">低风险</div>
-        </el-card>
-      </el-col>
-    </el-row>
+    <!-- 页面标题 -->
+    <div class="page-header">
+      <h2 class="page-title">风险预警</h2>
+    </div>
 
-    <el-card style="margin-top: 20px">
-      <template #header><span>风险预警列表</span></template>
-      <el-table :data="tableData" v-loading="loading">
-        <el-table-column prop="riskType" label="风险类型" width="120">
-          <template #default="{ row }">{{ getRiskTypeName(row.riskType) }}</template>
-        </el-table-column>
-        <el-table-column prop="alertMessage" label="预警信息" min-width="200" />
-        <el-table-column label="风险等级" width="100">
-          <template #default="{ row }">
-            <el-tag :type="getLevelType(row.riskLevel)">{{ getLevelText(row.riskLevel) }}</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column label="关联报销单" width="100">
-          <template #default="{ row }">
-            <el-button type="primary" size="small" link @click="viewClaim(row)">查看</el-button>
-          </template>
-        </el-table-column>
-        <el-table-column prop="createdAt" label="预警时间" width="160" />
-        <el-table-column label="操作" width="120" fixed="right">
-          <template #default="{ row }">
-            <el-button type="danger" size="small" @click="deleteClaim(row)">删除报销单</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-empty v-if="!loading && tableData.length === 0" description="暂无风险预警" />
-    </el-card>
+    <!-- 四个等级指标卡 -->
+    <div class="risk-stats">
+      <div class="risk-stat-card severe" @click="filterByLevel(4)">
+        <div class="stat-icon"><el-icon><WarningFilled /></el-icon></div>
+        <div class="stat-body">
+          <span class="stat-value">{{ stats.severe }}</span>
+          <span class="stat-label">严重风险</span>
+        </div>
+      </div>
+      <div class="risk-stat-card high" @click="filterByLevel(3)">
+        <div class="stat-icon"><el-icon><WarnTriangleFilled /></el-icon></div>
+        <div class="stat-body">
+          <span class="stat-value">{{ stats.high }}</span>
+          <span class="stat-label">高风险</span>
+        </div>
+      </div>
+      <div class="risk-stat-card medium" @click="filterByLevel(2)">
+        <div class="stat-icon"><el-icon><InfoFilled /></el-icon></div>
+        <div class="stat-body">
+          <span class="stat-value">{{ stats.medium }}</span>
+          <span class="stat-label">中风险</span>
+        </div>
+      </div>
+      <div class="risk-stat-card low" @click="filterByLevel(1)">
+        <div class="stat-icon"><el-icon><CircleCheckFilled /></el-icon></div>
+        <div class="stat-body">
+          <span class="stat-value">{{ stats.low }}</span>
+          <span class="stat-label">低风险</span>
+        </div>
+      </div>
+    </div>
 
-    <!-- 报销单详情对话框 -->
-    <el-dialog v-model="detailVisible" title="报销单详情" width="600px">
-      <el-descriptions :column="2" border v-if="currentClaim">
-        <el-descriptions-item label="单号">{{ currentClaim.claimNo }}</el-descriptions-item>
-        <el-descriptions-item label="金额">{{ formatAmount(currentClaim.amount) }} 元</el-descriptions-item>
-        <el-descriptions-item label="事由" :span="2">{{ currentClaim.title }}</el-descriptions-item>
-        <el-descriptions-item label="消费日期">{{ currentClaim.expenseDate }}</el-descriptions-item>
-        <el-descriptions-item label="状态">
-          <el-tag :type="getStatusType(currentClaim.status)">{{ getStatusText(currentClaim.status) }}</el-tag>
-        </el-descriptions-item>
-      </el-descriptions>
-    </el-dialog>
+    <!-- 风险预警列表 -->
+    <div class="glass-card">
+      <div class="card-header-row">
+        <span class="card-title">风险预警列表</span>
+        <span class="alert-count" v-if="filteredData.length > 0">{{ filteredData.length }} 条预警</span>
+      </div>
+
+      <div v-if="!loading && filteredData.length > 0" class="risk-list">
+        <div v-for="row in filteredData" :key="row.id" class="risk-item">
+          <div class="risk-indicator" :class="`level-${row.riskLevel}`"></div>
+          <div class="risk-content">
+            <div class="risk-top">
+              <span class="risk-type">{{ getRiskTypeName(row.riskType) }}</span>
+              <span class="risk-level-badge" :class="`level-badge-${row.riskLevel}`">{{ getLevelText(row.riskLevel) }}</span>
+            </div>
+            <div class="risk-message">{{ row.alertMessage }}</div>
+            <div class="risk-meta">
+              <span class="risk-time">{{ row.createdAt }}</span>
+            </div>
+          </div>
+          <div class="risk-actions">
+            <el-button type="primary" size="small" link @click="viewClaim(row)">查看报销单</el-button>
+            <el-button type="danger" size="small" link @click="deleteClaim(row)">删除</el-button>
+          </div>
+        </div>
+      </div>
+
+      <el-empty v-if="!loading && filteredData.length === 0" description="暂无风险预警" />
+    </div>
+
+    <!-- 报销单详情抽屉 -->
+    <el-drawer v-model="detailVisible" title="报销单详情" size="460px" direction="rtl">
+      <div class="drawer-inner" v-if="currentClaim">
+        <div class="claim-header">
+          <span class="claim-no">{{ currentClaim.claimNo }}</span>
+          <span class="status-badge" :class="`status-${currentClaim.status}`">{{ getStatusText(currentClaim.status) }}</span>
+        </div>
+        <div class="detail-section">
+          <div class="detail-row">
+            <span class="detail-label">金额</span>
+            <span class="detail-value amount-high">¥ {{ formatAmount(currentClaim.amount) }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">事由</span>
+            <span class="detail-value">{{ currentClaim.title }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">消费日期</span>
+            <span class="detail-value">{{ currentClaim.expenseDate }}</span>
+          </div>
+        </div>
+      </div>
+    </el-drawer>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
+import { WarningFilled, WarnTriangleFilled, InfoFilled, CircleCheckFilled } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import api from '../../api'
 
@@ -79,41 +104,19 @@ const tableData = ref([])
 const stats = reactive({ severe: 0, high: 0, medium: 0, low: 0 })
 const detailVisible = ref(false)
 const currentClaim = ref(null)
+const activeLevel = ref(null)
 
-const getLevelType = (level) => {
-  const types = { 1: 'success', 2: 'info', 3: 'warning', 4: 'danger' }
-  return types[level] || ''
-}
+const filteredData = computed(() => {
+  if (!activeLevel.value) return tableData.value
+  return tableData.value.filter(r => r.riskLevel === activeLevel.value)
+})
 
-const getLevelText = (level) => {
-  const texts = { 1: '低', 2: '中', 3: '高', 4: '严重' }
-  return texts[level] || ''
-}
+const formatAmount = (amount) => (amount ? (amount / 100).toFixed(2) : '0.00')
+const getRiskTypeName = (type) => ({ 'WEEKEND_CLAIM': '周末报销', 'HIGH_AMOUNT': '高金额', 'HIGH_FREQUENCY': '高频报销', 'BUDGET_EXCEED': '预算超支' }[type] || type)
+const getLevelText = (level) => ({ 1: '低', 2: '中', 3: '高', 4: '严重' }[level] || '未知')
+const getStatusText = (status) => ({ 0: '草稿', 1: '待经理审批', 2: '待财务审计', 3: '经理驳回', 4: '已入账', 5: '财务驳回' }[status] || '未知')
 
-const getRiskTypeName = (type) => {
-  const names = {
-    'WEEKEND_CLAIM': '周末报销',
-    'HIGH_AMOUNT': '高金额',
-    'HIGH_FREQUENCY': '高频报销',
-    'BUDGET_EXCEED': '预算超支'
-  }
-  return names[type] || type
-}
-
-const formatAmount = (amount) => {
-  if (!amount) return '0.00'
-  return (amount / 100).toFixed(2)
-}
-
-const getStatusType = (status) => {
-  const types = { 0: 'info', 1: 'warning', 2: 'primary', 3: 'danger', 4: 'success', 5: 'danger' }
-  return types[status] || 'info'
-}
-
-const getStatusText = (status) => {
-  const texts = { 0: '草稿', 1: '待经理审批', 2: '待财务审计', 3: '经理驳回', 4: '已入账', 5: '财务驳回' }
-  return texts[status] || '未知'
-}
+const filterByLevel = (level) => { activeLevel.value = activeLevel.value === level ? null : level }
 
 const loadData = async () => {
   loading.value = true
@@ -126,59 +129,165 @@ const loadData = async () => {
       stats.medium = tableData.value.filter(r => r.riskLevel === 2).length
       stats.low = tableData.value.filter(r => r.riskLevel === 1).length
     }
-  } catch (e) {
-    console.error(e)
-  } finally {
-    loading.value = false
-  }
+  } catch {} finally { loading.value = false }
 }
 
-// 查看关联报销单
 const viewClaim = async (row) => {
   try {
     const res = await api.getClaim(row.claimId)
-    if (res.code === 200) {
-      currentClaim.value = res.data
-      detailVisible.value = true
-    }
-  } catch (e) {
-    ElMessage.error('获取报销单信息失败')
-  }
+    if (res.code === 200) { currentClaim.value = res.data; detailVisible.value = true }
+  } catch { ElMessage.error('获取报销单信息失败') }
 }
 
-// 删除报销单
 const deleteClaim = async (row) => {
   try {
-    await ElMessageBox.confirm(
-      `确定要删除该报销单吗？此操作会删除关联的风险预警记录。`,
-      '删除确认',
-      { type: 'warning' }
-    )
+    await ElMessageBox.confirm(`确定要删除该报销单吗？此操作会删除关联的风险预警记录。`, '删除确认', { type: 'warning' })
     const res = await api.deleteClaim(row.claimId)
-    if (res.code === 200) {
-      ElMessage.success('删除成功')
-      loadData()
-    } else {
-      ElMessage.error(res.msg || '删除失败')
-    }
-  } catch (e) {
-    if (e !== 'cancel') {
-      ElMessage.error('删除失败')
-    }
-  }
+    if (res.code === 200) { ElMessage.success('删除成功'); loadData() }
+    else ElMessage.error(res.msg || '删除失败')
+  } catch (e) { if (e !== 'cancel') ElMessage.error('删除失败') }
 }
 
-onMounted(() => {
-  loadData()
-})
+onMounted(() => loadData())
 </script>
 
 <style scoped>
-.stat-card { text-align: center; padding: 20px 0; }
-.stat-value { font-size: 32px; font-weight: bold; }
-.stat-label { color: #999; margin-top: 8px; }
-.stat-card.danger .stat-value { color: #f56c6c; }
-.stat-card.warning .stat-value { color: #e6a23c; }
-.stat-card.info .stat-value { color: #409eff; }
-.stat-card.success .stat-value { color: #67c23a; }
+.risk-page { padding: 0; min-height: 100%; }
+
+.page-header { margin-bottom: 24px; }
+.page-title { font-size: 22px; font-weight: 700; color: #fff; margin: 0; }
+
+/* 风险等级指标卡 */
+.risk-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+
+.risk-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 16px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.25s ease;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 16px rgba(31,38,135,0.12);
+}
+
+.risk-stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(31,38,135,0.25); }
+
+.risk-stat-card.severe { border-color: rgba(248,113,113,0.3); background: rgba(248,113,113,0.12); }
+.risk-stat-card.high { border-color: rgba(251,191,36,0.3); background: rgba(251,191,36,0.1); }
+.risk-stat-card.medium { border-color: rgba(96,165,250,0.3); background: rgba(96,165,250,0.1); }
+.risk-stat-card.low { border-color: rgba(52,211,153,0.3); background: rgba(52,211,153,0.1); }
+
+.stat-icon { font-size: 28px; flex-shrink: 0; }
+.severe .stat-icon { color: #f87171; }
+.high .stat-icon { color: #fbbf24; }
+.medium .stat-icon { color: #60a5fa; }
+.low .stat-icon { color: #34d399; }
+
+.stat-body { display: flex; flex-direction: column; }
+.stat-value { font-size: 28px; font-weight: 800; color: #fff; line-height: 1.1; }
+.stat-label { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+
+/* 玻璃卡片 */
+.glass-card {
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.card-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.card-title { font-size: 15px; font-weight: 600; color: #fff; }
+.alert-count {
+  font-size: 12px;
+  padding: 2px 10px;
+  background: rgba(248,113,113,0.2);
+  border: 1px solid rgba(248,113,113,0.3);
+  border-radius: 20px;
+  color: #f87171;
+}
+
+/* 风险列表 */
+.risk-list { display: flex; flex-direction: column; }
+
+.risk-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 18px 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  transition: background 0.2s;
+}
+
+.risk-item:last-child { border-bottom: none; }
+.risk-item:hover { background: rgba(255,255,255,0.04); }
+
+.risk-indicator { width: 4px; height: 60px; border-radius: 2px; flex-shrink: 0; margin-top: 4px; }
+.level-1, .level-badge-1 { background: #34d399; }
+.level-2, .level-badge-2 { background: #60a5fa; }
+.level-3, .level-badge-3 { background: #fbbf24; }
+.level-4, .level-badge-4 { background: #f87171; }
+
+.risk-content { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+.risk-top { display: flex; align-items: center; gap: 10px; }
+
+.risk-type { font-size: 14px; font-weight: 600; color: #fff; }
+.risk-level-badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.level-badge-1 { background: rgba(52,211,153,0.2); color: #34d399; }
+.level-badge-2 { background: rgba(96,165,250,0.2); color: #60a5fa; }
+.level-badge-3 { background: rgba(251,191,36,0.2); color: #fbbf24; }
+.level-badge-4 { background: rgba(248,113,113,0.2); color: #f87171; }
+
+.risk-message { font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.5; }
+.risk-meta { display: flex; gap: 12px; }
+.risk-time { font-size: 12px; color: rgba(255,255,255,0.35); }
+
+.risk-actions { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; flex-shrink: 0; }
+
+/* 抽屉 */
+:deep(.el-drawer) { background: rgba(15, 10, 40, 0.97) !important; backdrop-filter: blur(20px); border-left: 1px solid rgba(255,255,255,0.12); }
+:deep(.el-drawer__header) { color: #fff !important; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 20px 24px; margin-bottom: 0; }
+:deep(.el-drawer__body) { padding: 0; }
+
+.drawer-inner { padding: 24px; color: #fff; }
+
+.claim-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+.claim-no { font-family: monospace; font-size: 15px; color: rgba(255,255,255,0.7); }
+
+.status-badge {
+  display: inline-flex; align-items: center; padding: 3px 10px;
+  border-radius: 20px; font-size: 12px; font-weight: 500; border: 1px solid transparent;
+}
+.status-0 { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); border-color: rgba(255,255,255,0.2); }
+.status-1 { background: rgba(251,191,36,0.2); color: #fbbf24; border-color: rgba(251,191,36,0.3); }
+.status-2 { background: rgba(96,165,250,0.2); color: #60a5fa; border-color: rgba(96,165,250,0.3); }
+.status-3, .status-5 { background: rgba(248,113,113,0.2); color: #f87171; border-color: rgba(248,113,113,0.3); }
+.status-4 { background: rgba(52,211,153,0.2); color: #34d399; border-color: rgba(52,211,153,0.3); }
+
+.detail-section { display: flex; flex-direction: column; gap: 2px; }
+.detail-row { display: flex; gap: 16px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.detail-label { font-size: 12px; color: rgba(255,255,255,0.45); min-width: 70px; padding-top: 1px; }
+.detail-value { font-size: 14px; color: #fff; line-height: 1.5; }
+.amount-high { color: #f87171; font-weight: 700; }
+
+@media (max-width: 768px) {
+  .risk-stats { grid-template-columns: repeat(2, 1fr); }
+}
 </style>

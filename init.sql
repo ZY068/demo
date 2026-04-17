@@ -49,7 +49,6 @@ CREATE TABLE `sys_user` (
   `status` TINYINT(1) DEFAULT 1 COMMENT '状态：0禁用 1启用',
   `last_login_at` DATETIME DEFAULT NULL COMMENT '最后登录时间',
   `last_login_ip` VARCHAR(64) DEFAULT NULL COMMENT '最后登录IP',
-  `token` VARCHAR(256) DEFAULT NULL COMMENT '登录Token（单点登录用）',
   `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   INDEX `idx_username` (`username`),

@@ -15,8 +15,8 @@ public class Result<T> {
         return r;
     }
 
-    public static Result error(String msg) {
-        Result r = new Result<>();
+    public static <T> Result<T> error(String msg) {
+        Result<T> r = new Result<>();
         r.setCode(500);
         r.setMsg(msg);
         return r;

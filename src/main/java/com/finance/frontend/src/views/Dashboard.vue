@@ -181,17 +181,19 @@ const initTrendChart = (data) => {
     const yData = data.map(d => d.amount)
 
     chart.setOption({
-      tooltip: { trigger: 'axis', formatter: '{b}<br/>金额: {c} 元' },
+      backgroundColor: 'transparent',
+      tooltip: { trigger: 'axis', formatter: '{b}<br/>金额: {c} 元', backgroundColor: 'rgba(0,0,0,0.5)', borderColor: 'rgba(255,255,255,0.2)', textStyle: { color: '#fff' } },
       grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
-      xAxis: { type: 'category', data: xData, boundaryGap: false },
-      yAxis: { type: 'value', name: '金额(元)' },
+      xAxis: { type: 'category', data: xData, boundaryGap: false, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.3)' } }, axisLabel: { color: 'rgba(255,255,255,0.7)' } },
+      yAxis: { type: 'value', name: '金额(元)', axisLine: { lineStyle: { color: 'rgba(255,255,255,0.3)' } }, axisLabel: { color: 'rgba(255,255,255,0.7)' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.1)' } } },
       series: [{
         name: '报销金额',
         type: 'line',
         smooth: true,
-        areaStyle: { opacity: 0.3 },
+        areaStyle: { opacity: 0.4, color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: 'rgba(64,158,255,0.6)' }, { offset: 1, color: 'rgba(64,158,255,0.05)' }] } },
         data: yData,
-        itemStyle: { color: '#409eff' }
+        itemStyle: { color: '#60a5fa' },
+        lineStyle: { color: '#60a5fa' }
       }]
     })
   })
@@ -203,15 +205,16 @@ const initRiskChart = (data) => {
     if (!riskChartRef.value) return
     const chart = echarts.init(riskChartRef.value)
     chart.setOption({
-      tooltip: { trigger: 'item' },
-      legend: { bottom: 0 },
+      backgroundColor: 'transparent',
+      tooltip: { trigger: 'item', backgroundColor: 'rgba(0,0,0,0.5)', borderColor: 'rgba(255,255,255,0.2)', textStyle: { color: '#fff' } },
+      legend: { bottom: 0, textStyle: { color: 'rgba(255,255,255,0.7)' } },
       series: [{
         name: '风险分布',
         type: 'pie',
         radius: ['40%', '70%'],
         avoidLabelOverlap: false,
-        itemStyle: { borderRadius: 10, borderColor: '#fff', borderWidth: 2 },
-        label: { show: true, formatter: '{b}: {c}' },
+        itemStyle: { borderRadius: 10, borderColor: 'rgba(255,255,255,0.3)', borderWidth: 2 },
+        label: { show: true, formatter: '{b}: {c}', color: '#fff' },
         data: data
       }]
     })
@@ -224,15 +227,16 @@ const initStatusChart = (data) => {
     if (!statusChartRef.value) return
     const chart = echarts.init(statusChartRef.value)
     chart.setOption({
-      tooltip: { trigger: 'item' },
-      legend: { bottom: 0 },
+      backgroundColor: 'transparent',
+      tooltip: { trigger: 'item', backgroundColor: 'rgba(0,0,0,0.5)', borderColor: 'rgba(255,255,255,0.2)', textStyle: { color: '#fff' } },
+      legend: { bottom: 0, textStyle: { color: 'rgba(255,255,255,0.7)' } },
       series: [{
         name: '状态分布',
         type: 'pie',
         radius: ['40%', '70%'],
         avoidLabelOverlap: false,
-        itemStyle: { borderRadius: 10, borderColor: '#fff', borderWidth: 2 },
-        label: { show: true, formatter: '{b}: {c}' },
+        itemStyle: { borderRadius: 10, borderColor: 'rgba(255,255,255,0.3)', borderWidth: 2 },
+        label: { show: true, formatter: '{b}: {c}', color: '#fff' },
         data: data
       }]
     })
@@ -379,18 +383,28 @@ const getTrendData = (claims) => {
 .stat-row { margin-bottom: 20px; }
 .stat-card {
   padding: 20px;
-  border-radius: 12px;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   color: white;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 24px rgba(31, 38, 135, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.stat-card.blue { background: linear-gradient(135deg, #667eea, #764ba2); }
-.stat-card.orange { background: linear-gradient(135deg, #f093fb, #f5576c); }
-.stat-card.red { background: linear-gradient(135deg, #fa709a, #fee140); }
-.stat-card.green { background: linear-gradient(135deg, #43e97b, #38f9d7); }
-.stat-icon { font-size: 48px; opacity: 0.8; margin-right: 16px; }
-.stat-value { font-size: 28px; font-weight: bold; }
-.stat-label { font-size: 14px; opacity: 0.9; margin-top: 4px; }
-.card-header { display: flex; justify-content: space-between; align-items: center; }
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(31, 38, 135, 0.35);
+}
+.stat-card.blue { background: linear-gradient(135deg, rgba(102, 126, 234, 0.7), rgba(118, 75, 162, 0.7)); border-color: rgba(102, 126, 234, 0.4); }
+.stat-card.orange { background: linear-gradient(135deg, rgba(240, 147, 251, 0.6), rgba(245, 87, 108, 0.6)); border-color: rgba(240, 147, 251, 0.4); }
+.stat-card.red { background: linear-gradient(135deg, rgba(250, 112, 154, 0.6), rgba(254, 225, 64, 0.5)); border-color: rgba(250, 112, 154, 0.4); }
+.stat-card.green { background: linear-gradient(135deg, rgba(67, 233, 123, 0.6), rgba(56, 249, 215, 0.6)); border-color: rgba(67, 233, 123, 0.4); }
+.stat-icon { font-size: 44px; opacity: 0.85; margin-right: 16px; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.2)); }
+.stat-value { font-size: 28px; font-weight: bold; color: #fff; }
+.stat-label { font-size: 14px; opacity: 0.85; margin-top: 4px; color: rgba(255,255,255,0.9); }
+.card-header { display: flex; justify-content: space-between; align-items: center; color: #fff; }
 .chart-card { height: 100%; }
 </style>
