@@ -29,7 +29,7 @@ const loading = ref(false)
 const loadData = async () => {
   loading.value = true
   try {
-    const res = await axios.get('http://localhost:8080/api/claims/list')
+    const res = await axios.get('http://118.31.247.232/api/claims/list')
     if (res.data.code === 200) {
       pendingList.value = res.data.data.filter(i => i.status === 0)
     }
@@ -39,7 +39,7 @@ const loadData = async () => {
 const doAudit = async (claimId, targetStatus) => {
   console.log("准备发送请求，ID:", claimId, "状态:", targetStatus);
   try {
-    const res = await axios.post('http://localhost:8080/api/claims/audit', {
+    const res = await axios.post('http://118.31.247.232/api/claims/audit', {
       id: claimId,
       status: targetStatus
     })

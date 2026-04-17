@@ -63,13 +63,13 @@ const isRiskOnly = ref(false)
 
 const fetchAll = async () => {
   isRiskOnly.value = false
-  const res = await axios.get('http://localhost:8080/api/claims/list')
+  const res = await axios.get('http://118.31.247.232/api/claims/list')
   if (res.data.code === 200) displayList.value = res.data.data
 }
 
 const fetchRisk = async () => {
   isRiskOnly.value = true
-  const res = await axios.get('http://localhost:8080/api/claims/high-risk')
+  const res = await axios.get('http://118.31.247.232/api/claims/high-risk')
   if (res.data.code === 200) displayList.value = res.data.data
 }
 
@@ -83,7 +83,7 @@ const handleAudit = (row, targetStatus) => {
     cancelButtonText: '取消',
   }).then(async ({ value }) => {
     // 1. 发送请求
-    const res = await axios.post('http://localhost:8080/api/claims/audit-v2', {
+    const res = await axios.post('http://118.31.247.232/api/claims/audit-v2', {
       id: row.id,
       status: targetStatus,
       comment: value

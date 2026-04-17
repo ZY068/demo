@@ -1,0 +1,492 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2026-03-28T10:33:31.883+08:00  INFO 480909 --- [           main] com.finance.demo.DemoApplication         : Starting DemoApplication v0.0.1-SNAPSHOT using Java 17.0.18 with PID 480909 (/root/demo/target/smart-reimbursement-0.0.1-SNAPSHOT.jar started by root in /root/demo)
+2026-03-28T10:33:31.932+08:00  INFO 480909 --- [           main] com.finance.demo.DemoApplication         : No active profile set, falling back to 1 default profile: "default"
+2026-03-28T10:33:34.876+08:00  INFO 480909 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-03-28T10:33:34.893+08:00  INFO 480909 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-03-28T10:33:34.894+08:00  INFO 480909 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.16]
+2026-03-28T10:33:34.953+08:00  INFO 480909 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-03-28T10:33:34.955+08:00  INFO 480909 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2795 ms
+Logging initialized using 'class org.apache.ibatis.logging.stdout.StdOutImpl' adapter.
+Initialization Sequence datacenterId:0 workerId:6
+ _ _   |_  _ _|_. ___ _ |    _ 
+| | |\/|_)(_| | |_\  |_)||_|_\ 
+     /               |         
+                        3.5.5 
+[风险规则] 已注册检测器: [BUDGET_EXCEED, WEEKEND_CLAIM, HIGH_AMOUNT, HIGH_FREQUENCY]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@36bed37a] was not registered for synchronization because synchronization is not active
+2026-03-28T10:33:36.469+08:00  INFO 480909 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-03-28T10:33:36.802+08:00  INFO 480909 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6b8b5020
+2026-03-28T10:33:36.804+08:00  INFO 480909 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+JDBC Connection [HikariProxyConnection@1746061516 wrapping com.mysql.cj.jdbc.ConnectionImpl@6b8b5020] will not be managed by Spring
+==>  Preparing: SELECT id,rule_code,rule_name,rule_type,description,priority,enabled,error_message,created_at,updated_at FROM expense_policy_rule WHERE (enabled = ?) ORDER BY priority ASC
+==> Parameters: true(Boolean)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@36bed37a]
+2026-03-28T10:33:38.018+08:00  INFO 480909 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2026-03-28T10:33:38.040+08:00  INFO 480909 --- [           main] com.finance.demo.DemoApplication         : Started DemoApplication in 6.925 seconds (process running for 8.085)
+2026-03-28T10:34:08.636+08:00  INFO 480909 --- [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-28T10:34:08.637+08:00  INFO 480909 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-03-28T10:34:08.639+08:00  INFO 480909 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@17ff956f] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1108170298 wrapping com.mysql.cj.jdbc.ConnectionImpl@6b8b5020] will not be managed by Spring
+==>  Preparing: SELECT id,username,password,real_name,role,dept_id,email,phone,status,last_login_at,last_login_ip,token,created_at,updated_at FROM sys_user WHERE (username = ?)
+==> Parameters: emp001(String)
+<==    Columns: id, username, password, real_name, role, dept_id, email, phone, status, last_login_at, last_login_ip, token, created_at, updated_at
+<==        Row: 1, emp001, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 张三, 0, 1, null, null, 1, null, null, null, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@17ff956f]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@348f99b5] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@101899434 wrapping com.mysql.cj.jdbc.ConnectionImpl@6b8b5020] will not be managed by Spring
+==>  Preparing: UPDATE sys_user SET username=?, password=?, real_name=?, role=?, dept_id=?, status=?, last_login_at=?, token=?, created_at=?, updated_at=? WHERE id=?
+==> Parameters: emp001(String), $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK(String), 张三(String), 0(Integer), 1(Integer), 1(Integer), 2026-03-28T10:38:07.877999756(LocalDateTime), eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoiZW1wMDAxIiwic3ViIjoiZW1wMDAxIiwiaWF0IjoxNzc0NjY1NDg3LCJleHAiOjE3NzQ3NTE4ODd9.V144sSy0kxjYZc83JzTILC67EMwIBJAIKS12TqXElHHe5C5VIJdhMmquMfDsDsRa(String), 2026-03-27T15:30:39(LocalDateTime), 2026-03-27T15:30:39(LocalDateTime), 1(Integer)
+<==    Updates: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@348f99b5]
+2026-03-28T10:52:00.621+08:00  INFO 480909 --- [nio-8080-exec-7] o.apache.coyote.http11.Http11Processor   : Error parsing HTTP request header
+ Note: further occurrences of HTTP request parsing errors will be logged at DEBUG level.
+
+java.lang.IllegalArgumentException: Invalid character found in method name [0x030x000x00/*0xe00x000x000x000x000x00Cookie: ]. HTTP method names must be tokens
+	at org.apache.coyote.http11.Http11InputBuffer.parseRequestLine(Http11InputBuffer.java:407) ~[tomcat-embed-core-10.1.16.jar!/:na]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:264) ~[tomcat-embed-core-10.1.16.jar!/:na]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-10.1.16.jar!/:na]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896) ~[tomcat-embed-core-10.1.16.jar!/:na]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744) ~[tomcat-embed-core-10.1.16.jar!/:na]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.16.jar!/:na]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191) ~[tomcat-embed-core-10.1.16.jar!/:na]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-10.1.16.jar!/:na]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) ~[tomcat-embed-core-10.1.16.jar!/:na]
+	at java.base/java.lang.Thread.run(Thread.java:840) ~[na:na]
+
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@77b42811] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@388289426 wrapping com.mysql.cj.jdbc.ConnectionImpl@6ab548a0] will not be managed by Spring
+==>  Preparing: SELECT id,username,password,real_name,role,dept_id,email,phone,status,last_login_at,last_login_ip,token,created_at,updated_at FROM sys_user WHERE (username = ?)
+==> Parameters: admin(String)
+<==    Columns: id, username, password, real_name, role, dept_id, email, phone, status, last_login_at, last_login_ip, token, created_at, updated_at
+<==        Row: 8, admin, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 系统管理员, 9, null, null, null, 1, null, null, null, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@77b42811]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@243362b6] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@356158945 wrapping com.mysql.cj.jdbc.ConnectionImpl@6ab548a0] will not be managed by Spring
+==>  Preparing: UPDATE sys_user SET username=?, password=?, real_name=?, role=?, status=?, last_login_at=?, token=?, created_at=?, updated_at=? WHERE id=?
+==> Parameters: admin(String), $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK(String), 系统管理员(String), 9(Integer), 1(Integer), 2026-03-28T14:34:21.941925317(LocalDateTime), eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjgsInVzZXJuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc3NDY3OTY2MSwiZXhwIjoxNzc0NzY2MDYxfQ.C69WsL5UyT9OSWLLNWe1Wh_W9Vb2pKRSTA6pl9WdTAO5Kfhe6kJi6Km-YrqN2c8U(String), 2026-03-27T15:30:39(LocalDateTime), 2026-03-27T15:30:39(LocalDateTime), 8(Integer)
+<==    Updates: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@243362b6]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@9d6c4b8] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1481997093 wrapping com.mysql.cj.jdbc.ConnectionImpl@6ab548a0] will not be managed by Spring
+==>  Preparing: SELECT id,username,password,real_name,role,dept_id,email,phone,status,last_login_at,last_login_ip,token,created_at,updated_at FROM sys_user WHERE (username = ?)
+==> Parameters: admin(String)
+<==    Columns: id, username, password, real_name, role, dept_id, email, phone, status, last_login_at, last_login_ip, token, created_at, updated_at
+<==        Row: 8, admin, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 系统管理员, 9, null, null, null, 1, 2026-03-28 14:34:22, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjgsInVzZXJuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc3NDY3OTY2MSwiZXhwIjoxNzc0NzY2MDYxfQ.C69WsL5UyT9OSWLLNWe1Wh_W9Vb2pKRSTA6pl9WdTAO5Kfhe6kJi6Km-YrqN2c8U, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@9d6c4b8]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@6b0c7916] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@788147443 wrapping com.mysql.cj.jdbc.ConnectionImpl@6ab548a0] will not be managed by Spring
+==>  Preparing: UPDATE sys_user SET username=?, password=?, real_name=?, role=?, status=?, last_login_at=?, token=?, created_at=?, updated_at=? WHERE id=?
+==> Parameters: admin(String), $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK(String), 系统管理员(String), 9(Integer), 1(Integer), 2026-03-28T14:38:40.831057802(LocalDateTime), eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjgsInVzZXJuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc3NDY3OTkyMCwiZXhwIjoxNzc0NzY2MzIwfQ.eHu1TqjYC2sRWiS8ImiXNbH_tQ6BLUHi0-NdzTRTA3aYG-jq9xtORe5Q44hTpASI(String), 2026-03-27T15:30:39(LocalDateTime), 2026-03-27T15:30:39(LocalDateTime), 8(Integer)
+<==    Updates: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@6b0c7916]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@352c8c1e] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1882064095 wrapping com.mysql.cj.jdbc.ConnectionImpl@6ab548a0] will not be managed by Spring
+==>  Preparing: SELECT id,username,password,real_name,role,dept_id,email,phone,status,last_login_at,last_login_ip,token,created_at,updated_at FROM sys_user WHERE (username = ?)
+==> Parameters: fin001(String)
+<==    Columns: id, username, password, real_name, role, dept_id, email, phone, status, last_login_at, last_login_ip, token, created_at, updated_at
+<==        Row: 6, fin001, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 王五, 2, 3, null, null, 1, null, null, null, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@352c8c1e]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5331d3f3] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@185446570 wrapping com.mysql.cj.jdbc.ConnectionImpl@6ab548a0] will not be managed by Spring
+==>  Preparing: UPDATE sys_user SET username=?, password=?, real_name=?, role=?, dept_id=?, status=?, last_login_at=?, token=?, created_at=?, updated_at=? WHERE id=?
+==> Parameters: fin001(String), $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK(String), 王五(String), 2(Integer), 3(Integer), 1(Integer), 2026-03-28T14:48:10.126404298(LocalDateTime), eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjYsInVzZXJuYW1lIjoiZmluMDAxIiwic3ViIjoiZmluMDAxIiwiaWF0IjoxNzc0NjgwNDkwLCJleHAiOjE3NzQ3NjY4OTB9.Wf83ZzfEQ_oIfbi-RHY9IdFQ3NMwZboCT4eRRIUUl5VxEtfMy3jSf2VWwv0XeRQi(String), 2026-03-27T15:30:39(LocalDateTime), 2026-03-27T15:30:39(LocalDateTime), 6(Integer)
+<==    Updates: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5331d3f3]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5068eb66] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@333271679 wrapping com.mysql.cj.jdbc.ConnectionImpl@6ab548a0] will not be managed by Spring
+==>  Preparing: SELECT id,username,password,real_name,role,dept_id,email,phone,status,last_login_at,last_login_ip,token,created_at,updated_at FROM sys_user WHERE (username = ?)
+==> Parameters: fin001(String)
+<==    Columns: id, username, password, real_name, role, dept_id, email, phone, status, last_login_at, last_login_ip, token, created_at, updated_at
+<==        Row: 6, fin001, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 王五, 2, 3, null, null, 1, 2026-03-28 14:48:10, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjYsInVzZXJuYW1lIjoiZmluMDAxIiwic3ViIjoiZmluMDAxIiwiaWF0IjoxNzc0NjgwNDkwLCJleHAiOjE3NzQ3NjY4OTB9.Wf83ZzfEQ_oIfbi-RHY9IdFQ3NMwZboCT4eRRIUUl5VxEtfMy3jSf2VWwv0XeRQi, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5068eb66]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@66a7cf08] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@94514204 wrapping com.mysql.cj.jdbc.ConnectionImpl@6ab548a0] will not be managed by Spring
+==>  Preparing: UPDATE sys_user SET username=?, password=?, real_name=?, role=?, dept_id=?, status=?, last_login_at=?, token=?, created_at=?, updated_at=? WHERE id=?
+==> Parameters: fin001(String), $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK(String), 王五(String), 2(Integer), 3(Integer), 1(Integer), 2026-03-28T14:49:03.301058640(LocalDateTime), eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjYsInVzZXJuYW1lIjoiZmluMDAxIiwic3ViIjoiZmluMDAxIiwiaWF0IjoxNzc0NjgwNTQzLCJleHAiOjE3NzQ3NjY5NDN9.Z1dzqIQDVFxICKOdquljhNhRXvB4UzPhj0FMTAfuuBxMuGDoVaq9M_Dl6obmJ6x_(String), 2026-03-27T15:30:39(LocalDateTime), 2026-03-27T15:30:39(LocalDateTime), 6(Integer)
+<==    Updates: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@66a7cf08]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@27939b36] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@173543575 wrapping com.mysql.cj.jdbc.ConnectionImpl@6ab548a0] will not be managed by Spring
+==>  Preparing: SELECT id,username,password,real_name,role,dept_id,email,phone,status,last_login_at,last_login_ip,token,created_at,updated_at FROM sys_user WHERE (username = ?)
+==> Parameters: admin(String)
+<==    Columns: id, username, password, real_name, role, dept_id, email, phone, status, last_login_at, last_login_ip, token, created_at, updated_at
+<==        Row: 8, admin, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 系统管理员, 9, null, null, null, 1, 2026-03-28 14:38:41, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjgsInVzZXJuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc3NDY3OTkyMCwiZXhwIjoxNzc0NzY2MzIwfQ.eHu1TqjYC2sRWiS8ImiXNbH_tQ6BLUHi0-NdzTRTA3aYG-jq9xtORe5Q44hTpASI, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@27939b36]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@155bbb0c] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1805994877 wrapping com.mysql.cj.jdbc.ConnectionImpl@6ab548a0] will not be managed by Spring
+==>  Preparing: UPDATE sys_user SET username=?, password=?, real_name=?, role=?, status=?, last_login_at=?, token=?, created_at=?, updated_at=? WHERE id=?
+==> Parameters: admin(String), $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK(String), 系统管理员(String), 9(Integer), 1(Integer), 2026-03-28T14:54:50.116384339(LocalDateTime), eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjgsInVzZXJuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc3NDY4MDg5MCwiZXhwIjoxNzc0NzY3MjkwfQ.tTvwdLLX2hd3Mma96Tjpitn_VT3FgJ9d_th-18e3eB39CSCSo4fj110amhK2cmXy(String), 2026-03-27T15:30:39(LocalDateTime), 2026-03-27T15:30:39(LocalDateTime), 8(Integer)
+<==    Updates: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@155bbb0c]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@76673e35] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@2108498291 wrapping com.mysql.cj.jdbc.ConnectionImpl@6ab548a0] will not be managed by Spring
+==>  Preparing: SELECT id,username,password,real_name,role,dept_id,email,phone,status,last_login_at,last_login_ip,token,created_at,updated_at FROM sys_user WHERE (username = ?)
+==> Parameters: admin(String)
+<==    Columns: id, username, password, real_name, role, dept_id, email, phone, status, last_login_at, last_login_ip, token, created_at, updated_at
+<==        Row: 8, admin, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 系统管理员, 9, null, null, null, 1, 2026-03-28 14:54:50, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjgsInVzZXJuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc3NDY4MDg5MCwiZXhwIjoxNzc0NzY3MjkwfQ.tTvwdLLX2hd3Mma96Tjpitn_VT3FgJ9d_th-18e3eB39CSCSo4fj110amhK2cmXy, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@76673e35]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@69e46ff6] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@404644772 wrapping com.mysql.cj.jdbc.ConnectionImpl@6ab548a0] will not be managed by Spring
+==>  Preparing: UPDATE sys_user SET username=?, password=?, real_name=?, role=?, status=?, last_login_at=?, token=?, created_at=?, updated_at=? WHERE id=?
+==> Parameters: admin(String), $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK(String), 系统管理员(String), 9(Integer), 1(Integer), 2026-03-28T14:57:55.577587031(LocalDateTime), eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjgsInVzZXJuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc3NDY4MTA3NSwiZXhwIjoxNzc0NzY3NDc1fQ.C5vMAPbhallOp-WoJwARh4Q5DwmpkRvxEACL-aK244UOj0MAsX1LKZx6g4zqLvbO(String), 2026-03-27T15:30:39(LocalDateTime), 2026-03-27T15:30:39(LocalDateTime), 8(Integer)
+<==    Updates: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@69e46ff6]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@59d12982] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1655740762 wrapping com.mysql.cj.jdbc.ConnectionImpl@6ab548a0] will not be managed by Spring
+==>  Preparing: SELECT id,username,password,real_name,role,dept_id,email,phone,status,last_login_at,last_login_ip,token,created_at,updated_at FROM sys_user WHERE id=?
+==> Parameters: 8(Integer)
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@221395f8] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@752119754 wrapping com.mysql.cj.jdbc.ConnectionImpl@28ebfe88] will not be managed by Spring
+==>  Preparing: SELECT id,username,password,real_name,role,dept_id,email,phone,status,last_login_at,last_login_ip,token,created_at,updated_at FROM sys_user WHERE id=?
+==> Parameters: 8(Integer)
+<==    Columns: id, username, password, real_name, role, dept_id, email, phone, status, last_login_at, last_login_ip, token, created_at, updated_at
+<==        Row: 8, admin, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 系统管理员, 9, null, null, null, 1, 2026-03-28 14:57:56, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjgsInVzZXJuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc3NDY4MTA3NSwiZXhwIjoxNzc0NzY3NDc1fQ.C5vMAPbhallOp-WoJwARh4Q5DwmpkRvxEACL-aK244UOj0MAsX1LKZx6g4zqLvbO, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@59d12982]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@26d1f19a] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@418943048 wrapping com.mysql.cj.jdbc.ConnectionImpl@6ab548a0] will not be managed by Spring
+==>  Preparing: SELECT id,username,password,real_name,role,dept_id,email,phone,status,last_login_at,last_login_ip,token,created_at,updated_at FROM sys_user ORDER BY created_at DESC
+==> Parameters: 
+<==    Columns: id, username, password, real_name, role, dept_id, email, phone, status, last_login_at, last_login_ip, token, created_at, updated_at
+<==        Row: 8, admin, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 系统管理员, 9, null, null, null, 1, 2026-03-28 14:57:56, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjgsInVzZXJuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc3NDY4MTA3NSwiZXhwIjoxNzc0NzY3NDc1fQ.C5vMAPbhallOp-WoJwARh4Q5DwmpkRvxEACL-aK244UOj0MAsX1LKZx6g4zqLvbO, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@221395f8]
+<==    Columns: id, username, password, real_name, role, dept_id, email, phone, status, last_login_at, last_login_ip, token, created_at, updated_at
+<==        Row: 1, emp001, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 张三, 0, 1, null, null, 1, 2026-03-28 10:38:08, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoiZW1wMDAxIiwic3ViIjoiZW1wMDAxIiwiaWF0IjoxNzc0NjY1NDg3LCJleHAiOjE3NzQ3NTE4ODd9.V144sSy0kxjYZc83JzTILC67EMwIBJAIKS12TqXElHHe5C5VIJdhMmquMfDsDsRa, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 2, emp002, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 小明, 0, 1, null, null, 1, null, null, null, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 3, emp003, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 小红, 0, 2, null, null, 1, null, null, null, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 4, mgr001, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 李四, 1, 1, null, null, 1, null, null, null, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 5, mgr002, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 王经理, 1, 2, null, null, 1, null, null, null, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 6, fin001, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 王五, 2, 3, null, null, 1, 2026-03-28 14:49:03, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjYsInVzZXJuYW1lIjoiZmluMDAxIiwic3ViIjoiZmluMDAxIiwiaWF0IjoxNzc0NjgwNTQzLCJleHAiOjE3NzQ3NjY5NDN9.Z1dzqIQDVFxICKOdquljhNhRXvB4UzPhj0FMTAfuuBxMuGDoVaq9M_Dl6obmJ6x_, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 7, fin002, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 赵财务, 2, 3, null, null, 1, null, null, null, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 8, admin, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 系统管理员, 9, null, null, null, 1, 2026-03-28 14:57:56, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjgsInVzZXJuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc3NDY4MTA3NSwiZXhwIjoxNzc0NzY3NDc1fQ.C5vMAPbhallOp-WoJwARh4Q5DwmpkRvxEACL-aK244UOj0MAsX1LKZx6g4zqLvbO, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 8
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@26d1f19a]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5b6bbd34] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1509250328 wrapping com.mysql.cj.jdbc.ConnectionImpl@28ebfe88] will not be managed by Spring
+==>  Preparing: SELECT id,dept_code,dept_name,parent_id,manager_id,status,created_at,updated_at FROM department
+==> Parameters: 
+<==    Columns: id, dept_code, dept_name, parent_id, manager_id, status, created_at, updated_at
+<==        Row: 1, DEPT001, 研发部, null, 4, 1, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 2, DEPT002, 市场部, null, 5, 1, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 3, DEPT003, 财务部, null, null, 1, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 4, DEPT004, 人力资源部, null, null, 1, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 5, DEPT005, 行政部, null, null, 1, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 5
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5b6bbd34]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2bcd1096] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@2145761031 wrapping com.mysql.cj.jdbc.ConnectionImpl@6ab548a0] will not be managed by Spring
+==>  Preparing: SELECT id,username,password,real_name,role,dept_id,email,phone,status,last_login_at,last_login_ip,token,created_at,updated_at FROM sys_user WHERE (username = ?)
+==> Parameters: fin001(String)
+<==    Columns: id, username, password, real_name, role, dept_id, email, phone, status, last_login_at, last_login_ip, token, created_at, updated_at
+<==        Row: 6, fin001, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 王五, 2, 3, null, null, 1, 2026-03-28 14:49:03, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjYsInVzZXJuYW1lIjoiZmluMDAxIiwic3ViIjoiZmluMDAxIiwiaWF0IjoxNzc0NjgwNTQzLCJleHAiOjE3NzQ3NjY5NDN9.Z1dzqIQDVFxICKOdquljhNhRXvB4UzPhj0FMTAfuuBxMuGDoVaq9M_Dl6obmJ6x_, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2bcd1096]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5939113f] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@439608110 wrapping com.mysql.cj.jdbc.ConnectionImpl@6ab548a0] will not be managed by Spring
+==>  Preparing: UPDATE sys_user SET username=?, password=?, real_name=?, role=?, dept_id=?, status=?, last_login_at=?, token=?, created_at=?, updated_at=? WHERE id=?
+==> Parameters: fin001(String), $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK(String), 王五(String), 2(Integer), 3(Integer), 1(Integer), 2026-03-28T14:58:04.763432700(LocalDateTime), eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjYsInVzZXJuYW1lIjoiZmluMDAxIiwic3ViIjoiZmluMDAxIiwiaWF0IjoxNzc0NjgxMDg0LCJleHAiOjE3NzQ3Njc0ODR9.t0MFFLCmDazowvsqv1XOeRjPmNwQ51nMiznPRk2PxjegdgmjH2D9F5riz6_S7ttF(String), 2026-03-27T15:30:39(LocalDateTime), 2026-03-27T15:30:39(LocalDateTime), 6(Integer)
+<==    Updates: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5939113f]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@6f3fa5b1] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@559849168 wrapping com.mysql.cj.jdbc.ConnectionImpl@6ab548a0] will not be managed by Spring
+==>  Preparing: SELECT id,username,password,real_name,role,dept_id,email,phone,status,last_login_at,last_login_ip,token,created_at,updated_at FROM sys_user WHERE id=?
+==> Parameters: 6(Integer)
+<==    Columns: id, username, password, real_name, role, dept_id, email, phone, status, last_login_at, last_login_ip, token, created_at, updated_at
+<==        Row: 6, fin001, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 王五, 2, 3, null, null, 1, 2026-03-28 14:58:05, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjYsInVzZXJuYW1lIjoiZmluMDAxIiwic3ViIjoiZmluMDAxIiwiaWF0IjoxNzc0NjgxMDg0LCJleHAiOjE3NzQ3Njc0ODR9.t0MFFLCmDazowvsqv1XOeRjPmNwQ51nMiznPRk2PxjegdgmjH2D9F5riz6_S7ttF, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2c8bb01] was not registered for synchronization because synchronization is not active
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@6f3fa5b1]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@13a9fdf1] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@27901976 wrapping com.mysql.cj.jdbc.ConnectionImpl@6ab548a0] will not be managed by Spring
+==>  Preparing: SELECT id,username,password,real_name,role,dept_id,email,phone,status,last_login_at,last_login_ip,token,created_at,updated_at FROM sys_user WHERE id=?
+==> Parameters: 1(Integer)
+JDBC Connection [HikariProxyConnection@289017369 wrapping com.mysql.cj.jdbc.ConnectionImpl@28ebfe88] will not be managed by Spring
+==>  Preparing: SELECT id,username,password,real_name,role,dept_id,email,phone,status,last_login_at,last_login_ip,token,created_at,updated_at FROM sys_user WHERE id=?
+==> Parameters: 6(Integer)
+<==    Columns: id, username, password, real_name, role, dept_id, email, phone, status, last_login_at, last_login_ip, token, created_at, updated_at
+<==        Row: 1, emp001, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 张三, 0, 1, null, null, 1, 2026-03-28 10:38:08, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoiZW1wMDAxIiwic3ViIjoiZW1wMDAxIiwiaWF0IjoxNzc0NjY1NDg3LCJleHAiOjE3NzQ3NTE4ODd9.V144sSy0kxjYZc83JzTILC67EMwIBJAIKS12TqXElHHe5C5VIJdhMmquMfDsDsRa, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@13a9fdf1]
+<==    Columns: id, username, password, real_name, role, dept_id, email, phone, status, last_login_at, last_login_ip, token, created_at, updated_at
+<==        Row: 6, fin001, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 王五, 2, 3, null, null, 1, 2026-03-28 14:58:05, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjYsInVzZXJuYW1lIjoiZmluMDAxIiwic3ViIjoiZmluMDAxIiwiaWF0IjoxNzc0NjgxMDg0LCJleHAiOjE3NzQ3Njc0ODR9.t0MFFLCmDazowvsqv1XOeRjPmNwQ51nMiznPRk2PxjegdgmjH2D9F5riz6_S7ttF, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2c8bb01]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@68358d92] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@847758400 wrapping com.mysql.cj.jdbc.ConnectionImpl@28ebfe88] will not be managed by Spring
+==>  Preparing: SELECT id,username,password,real_name,role,dept_id,email,phone,status,last_login_at,last_login_ip,token,created_at,updated_at FROM sys_user WHERE id=?
+==> Parameters: 1(Integer)
+<==    Columns: id, username, password, real_name, role, dept_id, email, phone, status, last_login_at, last_login_ip, token, created_at, updated_at
+<==        Row: 1, emp001, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 张三, 0, 1, null, null, 1, 2026-03-28 10:38:08, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoiZW1wMDAxIiwic3ViIjoiZW1wMDAxIiwiaWF0IjoxNzc0NjY1NDg3LCJleHAiOjE3NzQ3NTE4ODd9.V144sSy0kxjYZc83JzTILC67EMwIBJAIKS12TqXElHHe5C5VIJdhMmquMfDsDsRa, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@68358d92]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@3342b715] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@2011166194 wrapping com.mysql.cj.jdbc.ConnectionImpl@28ebfe88] will not be managed by Spring
+==>  Preparing: SELECT id,claim_no,user_id,dept_id,title,description,amount,expense_date,status,audit_comment,risk_score,created_at,updated_at FROM expense_claim WHERE (user_id = ?) ORDER BY created_at DESC
+==> Parameters: 1(Integer)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@3342b715]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1f54f96b] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@798658421 wrapping com.mysql.cj.jdbc.ConnectionImpl@6ab548a0] will not be managed by Spring
+==>  Preparing: SELECT id,username,password,real_name,role,dept_id,email,phone,status,last_login_at,last_login_ip,token,created_at,updated_at FROM sys_user WHERE id=?
+==> Parameters: 6(Integer)
+<==    Columns: id, username, password, real_name, role, dept_id, email, phone, status, last_login_at, last_login_ip, token, created_at, updated_at
+<==        Row: 6, fin001, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 王五, 2, 3, null, null, 1, 2026-03-28 14:58:05, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjYsInVzZXJuYW1lIjoiZmluMDAxIiwic3ViIjoiZmluMDAxIiwiaWF0IjoxNzc0NjgxMDg0LCJleHAiOjE3NzQ3Njc0ODR9.t0MFFLCmDazowvsqv1XOeRjPmNwQ51nMiznPRk2PxjegdgmjH2D9F5riz6_S7ttF, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1f54f96b]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@4825c5ec] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@116825214 wrapping com.mysql.cj.jdbc.ConnectionImpl@6ab548a0] will not be managed by Spring
+==>  Preparing: SELECT id,claim_id,risk_type,risk_level,risk_score,alert_message,trigger_rules,handling_status,handled_by,handled_at,handled_comment,created_at FROM risk_alert WHERE (handling_status = ?) ORDER BY risk_level DESC,created_at DESC
+==> Parameters: 0(Integer)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@4825c5ec]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@165df89a] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@20836383 wrapping com.mysql.cj.jdbc.ConnectionImpl@3d4ab86e] will not be managed by Spring
+==>  Preparing: SELECT id,username,password,real_name,role,dept_id,email,phone,status,last_login_at,last_login_ip,token,created_at,updated_at FROM sys_user WHERE (username = ?)
+==> Parameters: admin(String)
+<==    Columns: id, username, password, real_name, role, dept_id, email, phone, status, last_login_at, last_login_ip, token, created_at, updated_at
+<==        Row: 8, admin, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 系统管理员, 9, null, null, null, 1, 2026-03-28 14:57:56, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjgsInVzZXJuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc3NDY4MTA3NSwiZXhwIjoxNzc0NzY3NDc1fQ.C5vMAPbhallOp-WoJwARh4Q5DwmpkRvxEACL-aK244UOj0MAsX1LKZx6g4zqLvbO, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@165df89a]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@675e944b] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1151352741 wrapping com.mysql.cj.jdbc.ConnectionImpl@3d4ab86e] will not be managed by Spring
+==>  Preparing: UPDATE sys_user SET username=?, password=?, real_name=?, role=?, status=?, last_login_at=?, token=?, created_at=?, updated_at=? WHERE id=?
+==> Parameters: admin(String), $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK(String), 系统管理员(String), 9(Integer), 1(Integer), 2026-03-28T16:25:54.049680271(LocalDateTime), eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjgsInVzZXJuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc3NDY4NjM1NCwiZXhwIjoxNzc0NzcyNzU0fQ.s75ZTFHQSPGCUMgxU6JmQODV7d71Y1h6maCggJZomV7deqeLc693PxPPj8b781tO(String), 2026-03-27T15:30:39(LocalDateTime), 2026-03-27T15:30:39(LocalDateTime), 8(Integer)
+<==    Updates: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@675e944b]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@41edd1af] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@304523564 wrapping com.mysql.cj.jdbc.ConnectionImpl@642cf12c] will not be managed by Spring
+==>  Preparing: SELECT id,username,password,real_name,role,dept_id,email,phone,status,last_login_at,last_login_ip,token,created_at,updated_at FROM sys_user WHERE (username = ?)
+==> Parameters: admin(String)
+<==    Columns: id, username, password, real_name, role, dept_id, email, phone, status, last_login_at, last_login_ip, token, created_at, updated_at
+<==        Row: 8, admin, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 系统管理员, 9, null, null, null, 1, 2026-03-28 16:25:54, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjgsInVzZXJuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc3NDY4NjM1NCwiZXhwIjoxNzc0NzcyNzU0fQ.s75ZTFHQSPGCUMgxU6JmQODV7d71Y1h6maCggJZomV7deqeLc693PxPPj8b781tO, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@41edd1af]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2abf4387] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@225959989 wrapping com.mysql.cj.jdbc.ConnectionImpl@642cf12c] will not be managed by Spring
+==>  Preparing: UPDATE sys_user SET username=?, password=?, real_name=?, role=?, status=?, last_login_at=?, token=?, created_at=?, updated_at=? WHERE id=?
+==> Parameters: admin(String), $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK(String), 系统管理员(String), 9(Integer), 1(Integer), 2026-03-28T17:18:05.422018321(LocalDateTime), eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjgsInVzZXJuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc3NDY4OTQ4NSwiZXhwIjoxNzc0Nzc1ODg1fQ.-dDCykKfAp_1StP1dq6cqKEg5fXVkJrqO_6v2cfP8jGM7Obxbx5BMPbzFGReq-da(String), 2026-03-27T15:30:39(LocalDateTime), 2026-03-27T15:30:39(LocalDateTime), 8(Integer)
+<==    Updates: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@2abf4387]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7cf93d17] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@157263003 wrapping com.mysql.cj.jdbc.ConnectionImpl@642cf12c] will not be managed by Spring
+==>  Preparing: SELECT id,username,password,real_name,role,dept_id,email,phone,status,last_login_at,last_login_ip,token,created_at,updated_at FROM sys_user WHERE id=?
+==> Parameters: 8(Integer)
+<==    Columns: id, username, password, real_name, role, dept_id, email, phone, status, last_login_at, last_login_ip, token, created_at, updated_at
+<==        Row: 8, admin, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 系统管理员, 9, null, null, null, 1, 2026-03-28 17:18:05, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjgsInVzZXJuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc3NDY4OTQ4NSwiZXhwIjoxNzc0Nzc1ODg1fQ.-dDCykKfAp_1StP1dq6cqKEg5fXVkJrqO_6v2cfP8jGM7Obxbx5BMPbzFGReq-da, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7cf93d17]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@22bf6278] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1550018625 wrapping com.mysql.cj.jdbc.ConnectionImpl@642cf12c] will not be managed by Spring
+==>  Preparing: SELECT id,username,password,real_name,role,dept_id,email,phone,status,last_login_at,last_login_ip,token,created_at,updated_at FROM sys_user ORDER BY created_at DESC
+==> Parameters: 
+<==    Columns: id, username, password, real_name, role, dept_id, email, phone, status, last_login_at, last_login_ip, token, created_at, updated_at
+<==        Row: 1, emp001, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 张三, 0, 1, null, null, 1, 2026-03-28 10:38:08, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoiZW1wMDAxIiwic3ViIjoiZW1wMDAxIiwiaWF0IjoxNzc0NjY1NDg3LCJleHAiOjE3NzQ3NTE4ODd9.V144sSy0kxjYZc83JzTILC67EMwIBJAIKS12TqXElHHe5C5VIJdhMmquMfDsDsRa, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 2, emp002, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 小明, 0, 1, null, null, 1, null, null, null, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 3, emp003, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 小红, 0, 2, null, null, 1, null, null, null, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 4, mgr001, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 李四, 1, 1, null, null, 1, null, null, null, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 5, mgr002, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 王经理, 1, 2, null, null, 1, null, null, null, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 6, fin001, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 王五, 2, 3, null, null, 1, 2026-03-28 14:58:05, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjYsInVzZXJuYW1lIjoiZmluMDAxIiwic3ViIjoiZmluMDAxIiwiaWF0IjoxNzc0NjgxMDg0LCJleHAiOjE3NzQ3Njc0ODR9.t0MFFLCmDazowvsqv1XOeRjPmNwQ51nMiznPRk2PxjegdgmjH2D9F5riz6_S7ttF, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 7, fin002, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 赵财务, 2, 3, null, null, 1, null, null, null, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 8, admin, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 系统管理员, 9, null, null, null, 1, 2026-03-28 17:18:05, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjgsInVzZXJuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc3NDY4OTQ4NSwiZXhwIjoxNzc0Nzc1ODg1fQ.-dDCykKfAp_1StP1dq6cqKEg5fXVkJrqO_6v2cfP8jGM7Obxbx5BMPbzFGReq-da, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 8
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@22bf6278]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5f994ec9] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1646601533 wrapping com.mysql.cj.jdbc.ConnectionImpl@642cf12c] will not be managed by Spring
+==>  Preparing: SELECT id,username,password,real_name,role,dept_id,email,phone,status,last_login_at,last_login_ip,token,created_at,updated_at FROM sys_user WHERE id=?
+==> Parameters: 8(Integer)
+<==    Columns: id, username, password, real_name, role, dept_id, email, phone, status, last_login_at, last_login_ip, token, created_at, updated_at
+<==        Row: 8, admin, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 系统管理员, 9, null, null, null, 1, 2026-03-28 17:18:05, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjgsInVzZXJuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc3NDY4OTQ4NSwiZXhwIjoxNzc0Nzc1ODg1fQ.-dDCykKfAp_1StP1dq6cqKEg5fXVkJrqO_6v2cfP8jGM7Obxbx5BMPbzFGReq-da, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5f994ec9]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@6facdcdc] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@2060855526 wrapping com.mysql.cj.jdbc.ConnectionImpl@642cf12c] will not be managed by Spring
+==>  Preparing: SELECT id,dept_code,dept_name,parent_id,manager_id,status,created_at,updated_at FROM department
+==> Parameters: 
+<==    Columns: id, dept_code, dept_name, parent_id, manager_id, status, created_at, updated_at
+<==        Row: 1, DEPT001, 研发部, null, 4, 1, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 2, DEPT002, 市场部, null, 5, 1, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 3, DEPT003, 财务部, null, null, 1, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 4, DEPT004, 人力资源部, null, null, 1, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 5, DEPT005, 行政部, null, null, 1, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 5
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@6facdcdc]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@4a83242f] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@647584856 wrapping com.mysql.cj.jdbc.ConnectionImpl@642cf12c] will not be managed by Spring
+==>  Preparing: SELECT id,username,password,real_name,role,dept_id,email,phone,status,last_login_at,last_login_ip,token,created_at,updated_at FROM sys_user WHERE id=?
+==> Parameters: 8(Integer)
+<==    Columns: id, username, password, real_name, role, dept_id, email, phone, status, last_login_at, last_login_ip, token, created_at, updated_at
+<==        Row: 8, admin, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 系统管理员, 9, null, null, null, 1, 2026-03-28 17:18:05, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjgsInVzZXJuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc3NDY4OTQ4NSwiZXhwIjoxNzc0Nzc1ODg1fQ.-dDCykKfAp_1StP1dq6cqKEg5fXVkJrqO_6v2cfP8jGM7Obxbx5BMPbzFGReq-da, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@4a83242f]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@37833a94] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1256199445 wrapping com.mysql.cj.jdbc.ConnectionImpl@642cf12c] will not be managed by Spring
+==>  Preparing: SELECT id,rule_code,rule_name,rule_type,description,priority,enabled,error_message,created_at,updated_at FROM expense_policy_rule
+==> Parameters: 
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@37833a94]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@f5a46e6] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1890834920 wrapping com.mysql.cj.jdbc.ConnectionImpl@642cf12c] will not be managed by Spring
+==>  Preparing: SELECT id,username,password,real_name,role,dept_id,email,phone,status,last_login_at,last_login_ip,token,created_at,updated_at FROM sys_user WHERE id=?
+==> Parameters: 8(Integer)
+<==    Columns: id, username, password, real_name, role, dept_id, email, phone, status, last_login_at, last_login_ip, token, created_at, updated_at
+<==        Row: 8, admin, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 系统管理员, 9, null, null, null, 1, 2026-03-28 17:18:05, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjgsInVzZXJuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc3NDY4OTQ4NSwiZXhwIjoxNzc0Nzc1ODg1fQ.-dDCykKfAp_1StP1dq6cqKEg5fXVkJrqO_6v2cfP8jGM7Obxbx5BMPbzFGReq-da, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@f5a46e6]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7956bb0e] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@610709428 wrapping com.mysql.cj.jdbc.ConnectionImpl@642cf12c] will not be managed by Spring
+==>  Preparing: SELECT id,dept_code,dept_name,parent_id,manager_id,status,created_at,updated_at FROM department
+==> Parameters: 
+<==    Columns: id, dept_code, dept_name, parent_id, manager_id, status, created_at, updated_at
+<==        Row: 1, DEPT001, 研发部, null, 4, 1, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 2, DEPT002, 市场部, null, 5, 1, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 3, DEPT003, 财务部, null, null, 1, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 4, DEPT004, 人力资源部, null, null, 1, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 5, DEPT005, 行政部, null, null, 1, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 5
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7956bb0e]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7945ac68] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@346757471 wrapping com.mysql.cj.jdbc.ConnectionImpl@642cf12c] will not be managed by Spring
+==>  Preparing: SELECT id,username,password,real_name,role,dept_id,email,phone,status,last_login_at,last_login_ip,token,created_at,updated_at FROM sys_user WHERE id=?
+==> Parameters: 8(Integer)
+<==    Columns: id, username, password, real_name, role, dept_id, email, phone, status, last_login_at, last_login_ip, token, created_at, updated_at
+<==        Row: 8, admin, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 系统管理员, 9, null, null, null, 1, 2026-03-28 17:18:05, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjgsInVzZXJuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc3NDY4OTQ4NSwiZXhwIjoxNzc0Nzc1ODg1fQ.-dDCykKfAp_1StP1dq6cqKEg5fXVkJrqO_6v2cfP8jGM7Obxbx5BMPbzFGReq-da, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7945ac68]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@752b2b4a] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@890670366 wrapping com.mysql.cj.jdbc.ConnectionImpl@642cf12c] will not be managed by Spring
+==>  Preparing: SELECT id,username,password,real_name,role,dept_id,email,phone,status,last_login_at,last_login_ip,token,created_at,updated_at FROM sys_user ORDER BY created_at DESC
+==> Parameters: 
+<==    Columns: id, username, password, real_name, role, dept_id, email, phone, status, last_login_at, last_login_ip, token, created_at, updated_at
+<==        Row: 1, emp001, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 张三, 0, 1, null, null, 1, 2026-03-28 10:38:08, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoiZW1wMDAxIiwic3ViIjoiZW1wMDAxIiwiaWF0IjoxNzc0NjY1NDg3LCJleHAiOjE3NzQ3NTE4ODd9.V144sSy0kxjYZc83JzTILC67EMwIBJAIKS12TqXElHHe5C5VIJdhMmquMfDsDsRa, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 2, emp002, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 小明, 0, 1, null, null, 1, null, null, null, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 3, emp003, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 小红, 0, 2, null, null, 1, null, null, null, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 4, mgr001, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 李四, 1, 1, null, null, 1, null, null, null, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 5, mgr002, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 王经理, 1, 2, null, null, 1, null, null, null, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 6, fin001, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 王五, 2, 3, null, null, 1, 2026-03-28 14:58:05, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjYsInVzZXJuYW1lIjoiZmluMDAxIiwic3ViIjoiZmluMDAxIiwiaWF0IjoxNzc0NjgxMDg0LCJleHAiOjE3NzQ3Njc0ODR9.t0MFFLCmDazowvsqv1XOeRjPmNwQ51nMiznPRk2PxjegdgmjH2D9F5riz6_S7ttF, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 7, fin002, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 赵财务, 2, 3, null, null, 1, null, null, null, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 8, admin, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 系统管理员, 9, null, null, null, 1, 2026-03-28 17:18:05, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjgsInVzZXJuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc3NDY4OTQ4NSwiZXhwIjoxNzc0Nzc1ODg1fQ.-dDCykKfAp_1StP1dq6cqKEg5fXVkJrqO_6v2cfP8jGM7Obxbx5BMPbzFGReq-da, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 8
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@752b2b4a]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@86718d0] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@700862127 wrapping com.mysql.cj.jdbc.ConnectionImpl@642cf12c] will not be managed by Spring
+==>  Preparing: SELECT id,username,password,real_name,role,dept_id,email,phone,status,last_login_at,last_login_ip,token,created_at,updated_at FROM sys_user WHERE id=?
+==> Parameters: 8(Integer)
+<==    Columns: id, username, password, real_name, role, dept_id, email, phone, status, last_login_at, last_login_ip, token, created_at, updated_at
+<==        Row: 8, admin, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 系统管理员, 9, null, null, null, 1, 2026-03-28 17:18:05, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjgsInVzZXJuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc3NDY4OTQ4NSwiZXhwIjoxNzc0Nzc1ODg1fQ.-dDCykKfAp_1StP1dq6cqKEg5fXVkJrqO_6v2cfP8jGM7Obxbx5BMPbzFGReq-da, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@86718d0]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1d507f8a] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@759256424 wrapping com.mysql.cj.jdbc.ConnectionImpl@642cf12c] will not be managed by Spring
+==>  Preparing: SELECT id,rule_code,rule_name,rule_type,description,priority,enabled,error_message,created_at,updated_at FROM expense_policy_rule
+==> Parameters: 
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@1d507f8a]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@3c3d2e4] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@167814268 wrapping com.mysql.cj.jdbc.ConnectionImpl@642cf12c] will not be managed by Spring
+==>  Preparing: SELECT id,username,password,real_name,role,dept_id,email,phone,status,last_login_at,last_login_ip,token,created_at,updated_at FROM sys_user WHERE id=?
+==> Parameters: 8(Integer)
+<==    Columns: id, username, password, real_name, role, dept_id, email, phone, status, last_login_at, last_login_ip, token, created_at, updated_at
+<==        Row: 8, admin, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 系统管理员, 9, null, null, null, 1, 2026-03-28 17:18:05, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjgsInVzZXJuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc3NDY4OTQ4NSwiZXhwIjoxNzc0Nzc1ODg1fQ.-dDCykKfAp_1StP1dq6cqKEg5fXVkJrqO_6v2cfP8jGM7Obxbx5BMPbzFGReq-da, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@3c3d2e4]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7f471123] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1645127901 wrapping com.mysql.cj.jdbc.ConnectionImpl@642cf12c] will not be managed by Spring
+==>  Preparing: SELECT id,username,password,real_name,role,dept_id,email,phone,status,last_login_at,last_login_ip,token,created_at,updated_at FROM sys_user ORDER BY created_at DESC
+==> Parameters: 
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@37bdbb63] was not registered for synchronization because synchronization is not active
+<==    Columns: id, username, password, real_name, role, dept_id, email, phone, status, last_login_at, last_login_ip, token, created_at, updated_at
+<==        Row: 1, emp001, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 张三, 0, 1, null, null, 1, 2026-03-28 10:38:08, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoiZW1wMDAxIiwic3ViIjoiZW1wMDAxIiwiaWF0IjoxNzc0NjY1NDg3LCJleHAiOjE3NzQ3NTE4ODd9.V144sSy0kxjYZc83JzTILC67EMwIBJAIKS12TqXElHHe5C5VIJdhMmquMfDsDsRa, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+JDBC Connection [HikariProxyConnection@75727000 wrapping com.mysql.cj.jdbc.ConnectionImpl@59828d6a] will not be managed by Spring
+==>  Preparing: SELECT id,username,password,real_name,role,dept_id,email,phone,status,last_login_at,last_login_ip,token,created_at,updated_at FROM sys_user WHERE id=?
+<==        Row: 2, emp002, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 小明, 0, 1, null, null, 1, null, null, null, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+==> Parameters: 8(Integer)
+<==        Row: 3, emp003, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 小红, 0, 2, null, null, 1, null, null, null, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 4, mgr001, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 李四, 1, 1, null, null, 1, null, null, null, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 5, mgr002, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 王经理, 1, 2, null, null, 1, null, null, null, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 6, fin001, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 王五, 2, 3, null, null, 1, 2026-03-28 14:58:05, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjYsInVzZXJuYW1lIjoiZmluMDAxIiwic3ViIjoiZmluMDAxIiwiaWF0IjoxNzc0NjgxMDg0LCJleHAiOjE3NzQ3Njc0ODR9.t0MFFLCmDazowvsqv1XOeRjPmNwQ51nMiznPRk2PxjegdgmjH2D9F5riz6_S7ttF, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 7, fin002, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 赵财务, 2, 3, null, null, 1, null, null, null, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 8, admin, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 系统管理员, 9, null, null, null, 1, 2026-03-28 17:18:05, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjgsInVzZXJuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc3NDY4OTQ4NSwiZXhwIjoxNzc0Nzc1ODg1fQ.-dDCykKfAp_1StP1dq6cqKEg5fXVkJrqO_6v2cfP8jGM7Obxbx5BMPbzFGReq-da, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 8
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7f471123]
+<==    Columns: id, username, password, real_name, role, dept_id, email, phone, status, last_login_at, last_login_ip, token, created_at, updated_at
+<==        Row: 8, admin, $2a$10$WYj0ztt9hJF7zB16RlfdfeHgiQ0.HdZR0XAAbh9fc8rtJjZvYPRSK, 系统管理员, 9, null, null, null, 1, 2026-03-28 17:18:05, null, eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOjgsInVzZXJuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTc3NDY4OTQ4NSwiZXhwIjoxNzc0Nzc1ODg1fQ.-dDCykKfAp_1StP1dq6cqKEg5fXVkJrqO_6v2cfP8jGM7Obxbx5BMPbzFGReq-da, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@37bdbb63]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@778ea5bd] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1871805588 wrapping com.mysql.cj.jdbc.ConnectionImpl@59828d6a] will not be managed by Spring
+==>  Preparing: SELECT id,dept_code,dept_name,parent_id,manager_id,status,created_at,updated_at FROM department
+==> Parameters: 
+<==    Columns: id, dept_code, dept_name, parent_id, manager_id, status, created_at, updated_at
+<==        Row: 1, DEPT001, 研发部, null, 4, 1, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 2, DEPT002, 市场部, null, 5, 1, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 3, DEPT003, 财务部, null, null, 1, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 4, DEPT004, 人力资源部, null, null, 1, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==        Row: 5, DEPT005, 行政部, null, null, 1, 2026-03-27 15:30:39, 2026-03-27 15:30:39
+<==      Total: 5
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@778ea5bd]

@@ -73,7 +73,7 @@ const myClaims = ref([])
 
 // 获取列表
 const fetchMyClaims = async () => {
-  const res = await axios.get('http://localhost:8080/api/claims/list')
+  const res = await axios.get('http://118.31.247.232/api/claims/list')
   if (res.data.code === 200) {
     // 实际项目中这里应该按 userId 过滤，现在先显示全部
     myClaims.value = res.data.data
@@ -95,7 +95,7 @@ const submit = async () => {
     status: 0
   }
 
-  const res = await axios.post('http://localhost:8080/api/claims/submit', submitData)
+  const res = await axios.post('http://118.31.247.232/api/claims/submit', submitData)
   if (res.data.code === 200) {
     ElMessage.success('报销单已提交，等待审计')
     form.value = { title: '', displayAmount: 0, expenseDate: '' } // 重置表单

@@ -78,7 +78,7 @@ const handleLogin = async () => {
   
   loading.value = true
   try {
-    const res = await axios.post('http://localhost:8080/api/auth/login', loginForm.value)
+    const res = await axios.post('http://118.31.247.232/api/auth/login', loginForm.value)
     if (res.data.code === 200) {
       // 保存 Token 和用户信息
       const token = res.data.data?.token
